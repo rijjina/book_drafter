@@ -9,8 +9,8 @@ The workflow performs one task per invocation, reuses existing project artifacts
 Clone the repository:
 
 ```bash
-git clone https://github.com/rijjina/write-thai-academic-book.git
-cd write-thai-academic-book
+git clone https://github.com/rijjina/book_drafter.git
+cd book_drafter
 ```
 
 ### Codex
@@ -28,7 +28,7 @@ The skill is installed to `~/.agents/skills/write-thai-academic-book`.
 In **Customize > Plugins > Add marketplace > Add from a repository**, enter:
 
 ```text
-https://github.com/rijjina/write-thai-academic-book
+https://github.com/rijjina/book_drafter
 ```
 
 Install `write-thai-academic-book` from the `thai-academic-writing` marketplace. For direct skill upload, use `packages/write-thai-academic-book.zip` in **Customize > Skills**.
