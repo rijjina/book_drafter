@@ -1,0 +1,4 @@
+interface:
+  display_name: "Thai Academic Book Writer"
+  short_description: "Prepare Level A Thai academic manuscripts"
+  default_prompt: "Use $write-thai-academic-book to preserve and improve existing Thai academic drafts when available, perform one Level A task, and stop for human approval."

@@ -1,0 +1,14 @@
+{
+  "name": "thai-academic-writing",
+  "owner": {
+    "name": "rijjina"
+  },
+  "plugins": [
+    {
+      "name": "write-thai-academic-book",
+      "source": "./plugins/write-thai-academic-book",
+      "description": "Draft and quality-check Thai academic books and teaching documents with approval gates.",
+      "version": "1.0.0"
+    }
+  ]
+}

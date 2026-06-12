@@ -1,0 +1,25 @@
+{
+  "name": "write-thai-academic-book",
+  "version": "1.0.0",
+  "description": "Task-based drafting and Level A quality control for Thai teaching notes, books, and textbooks.",
+  "author": {
+    "name": "rijjina",
+    "url": "https://github.com/rijjina"
+  },
+  "skills": "./skills/",
+  "interface": {
+    "displayName": "Thai Academic Book Writer",
+    "shortDescription": "Draft Thai academic manuscripts at Level A",
+    "longDescription": "Create, audit, revise, and quality-check Thai teaching notes, books, and textbooks through independent tasks, reusable artifacts, deterministic gates, and explicit human approval.",
+    "developerName": "rijjina",
+    "category": "Education",
+    "capabilities": [
+      "Academic drafting",
+      "Manuscript audit",
+      "Level A quality control",
+      "Human approval gates"
+    ],
+    "defaultPrompt": "Use $write-thai-academic-book to perform one approved task for a Thai academic manuscript and stop for human review.",
+    "brandColor": "#0E7C86"
+  }
+}
