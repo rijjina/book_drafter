@@ -1,16 +1,22 @@
 param(
     [ValidateSet("codex", "antigravity", "antigravity-cli", "claude-code")]
-    [string]$Target = "codex"
+    [string]$Target = "codex",
+
+    [string]$DestinationRoot
 )
 
 $repoRoot = Split-Path -Parent $PSScriptRoot
 $source = Join-Path $repoRoot "plugins\write-thai-academic-book\skills\write-thai-academic-book"
 
-$base = switch ($Target) {
-    "codex" { Join-Path $HOME ".agents\skills" }
-    "antigravity" { Join-Path $HOME ".agents\skills" }
-    "antigravity-cli" { Join-Path $HOME ".gemini\antigravity-cli\skills" }
-    "claude-code" { Join-Path $HOME ".claude\skills" }
+$base = if ($DestinationRoot) {
+    $DestinationRoot
+} else {
+    switch ($Target) {
+        "codex" { Join-Path $HOME ".agents\skills" }
+        "antigravity" { Join-Path $HOME ".agents\skills" }
+        "antigravity-cli" { Join-Path $HOME ".gemini\antigravity-cli\skills" }
+        "claude-code" { Join-Path $HOME ".claude\skills" }
+    }
 }
 
 $destination = Join-Path $base "write-thai-academic-book"
