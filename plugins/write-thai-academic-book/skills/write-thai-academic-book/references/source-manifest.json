@@ -1,0 +1,1801 @@
+{
+  "version": 1,
+  "generated_at": "2026-07-31T06:37:15+00:00",
+  "policy": {
+    "curated_markdown_authoritative": true,
+    "automatic_replacement": false,
+    "quality_before_token_reduction": true,
+    "token_counts_are_diagnostic_only": true,
+    "raw_intermediates_persisted": false,
+    "sanitized_cache_excluded_from_distribution": true
+  },
+  "upstream": {
+    "name": "book-to-skill",
+    "version": "1.3.0",
+    "commit": "e087255f187c4fd3a5cdbb1cf1a11e09cdb84b46",
+    "license": "MIT",
+    "license_file": "../scripts/vendor/LICENSE.md"
+  },
+  "source_directory": "references/source-pdfs",
+  "source_count": 5,
+  "total_pages": 173,
+  "rebuilt_sources": 0,
+  "sources": [
+    {
+      "filename": "คู่มือการเขียนตำราหนังสือ.pdf",
+      "sha256": "ca4be74b3734159a73e16da2d1bda3f4a3e7b221798f5514bd16cdb2e0c00f69",
+      "bytes": 1091867,
+      "page_count": 89,
+      "extraction_method": [
+        "pypdf"
+      ],
+      "cache": ".reference-cache/ca4be74b3734159a73e16da2d1bda3f4a3e7b221798f5514bd16cdb2e0c00f69",
+      "page_map": [
+        {
+          "page": 1,
+          "characters": 61,
+          "thai_characters": 36,
+          "invisible_removed": 0,
+          "flags": []
+        },
+        {
+          "page": 2,
+          "characters": 3251,
+          "thai_characters": 2231,
+          "invisible_removed": 0,
+          "flags": [
+            "UNI0E_ARTIFACT",
+            "VISUAL_REVIEW_REQUIRED"
+          ]
+        },
+        {
+          "page": 3,
+          "characters": 1343,
+          "thai_characters": 826,
+          "invisible_removed": 0,
+          "flags": [
+            "UNI0E_ARTIFACT",
+            "VISUAL_REVIEW_REQUIRED"
+          ]
+        },
+        {
+          "page": 4,
+          "characters": 1170,
+          "thai_characters": 696,
+          "invisible_removed": 0,
+          "flags": [
+            "UNI0E_ARTIFACT",
+            "VISUAL_REVIEW_REQUIRED"
+          ]
+        },
+        {
+          "page": 5,
+          "characters": 3333,
+          "thai_characters": 2354,
+          "invisible_removed": 0,
+          "flags": []
+        },
+        {
+          "page": 6,
+          "characters": 1220,
+          "thai_characters": 688,
+          "invisible_removed": 0,
+          "flags": []
+        },
+        {
+          "page": 7,
+          "characters": 1354,
+          "thai_characters": 795,
+          "invisible_removed": 0,
+          "flags": []
+        },
+        {
+          "page": 8,
+          "characters": 942,
+          "thai_characters": 647,
+          "invisible_removed": 0,
+          "flags": []
+        },
+        {
+          "page": 9,
+          "characters": 2501,
+          "thai_characters": 640,
+          "invisible_removed": 0,
+          "flags": []
+        },
+        {
+          "page": 10,
+          "characters": 3326,
+          "thai_characters": 2008,
+          "invisible_removed": 0,
+          "flags": []
+        },
+        {
+          "page": 11,
+          "characters": 4242,
+          "thai_characters": 2532,
+          "invisible_removed": 0,
+          "flags": []
+        },
+        {
+          "page": 12,
+          "characters": 5109,
+          "thai_characters": 3233,
+          "invisible_removed": 0,
+          "flags": []
+        },
+        {
+          "page": 13,
+          "characters": 4709,
+          "thai_characters": 2901,
+          "invisible_removed": 0,
+          "flags": []
+        },
+        {
+          "page": 14,
+          "characters": 2752,
+          "thai_characters": 1045,
+          "invisible_removed": 0,
+          "flags": []
+        },
+        {
+          "page": 15,
+          "characters": 1788,
+          "thai_characters": 1179,
+          "invisible_removed": 0,
+          "flags": []
+        },
+        {
+          "page": 16,
+          "characters": 4147,
+          "thai_characters": 2548,
+          "invisible_removed": 0,
+          "flags": []
+        },
+        {
+          "page": 17,
+          "characters": 2981,
+          "thai_characters": 1867,
+          "invisible_removed": 0,
+          "flags": [
+            "UNI0E_ARTIFACT",
+            "VISUAL_REVIEW_REQUIRED"
+          ]
+        },
+        {
+          "page": 18,
+          "characters": 4142,
+          "thai_characters": 2244,
+          "invisible_removed": 0,
+          "flags": []
+        },
+        {
+          "page": 19,
+          "characters": 3348,
+          "thai_characters": 2146,
+          "invisible_removed": 0,
+          "flags": []
+        },
+        {
+          "page": 20,
+          "characters": 1510,
+          "thai_characters": 1010,
+          "invisible_removed": 0,
+          "flags": []
+        },
+        {
+          "page": 21,
+          "characters": 4254,
+          "thai_characters": 2683,
+          "invisible_removed": 0,
+          "flags": [
+            "UNI0E_ARTIFACT",
+            "VISUAL_REVIEW_REQUIRED"
+          ]
+        },
+        {
+          "page": 22,
+          "characters": 2541,
+          "thai_characters": 1531,
+          "invisible_removed": 0,
+          "flags": [
+            "UNI0E_ARTIFACT",
+            "VISUAL_REVIEW_REQUIRED"
+          ]
+        },
+        {
+          "page": 23,
+          "characters": 3600,
+          "thai_characters": 2109,
+          "invisible_removed": 0,
+          "flags": [
+            "UNI0E_ARTIFACT",
+            "VISUAL_REVIEW_REQUIRED"
+          ]
+        },
+        {
+          "page": 24,
+          "characters": 3260,
+          "thai_characters": 1803,
+          "invisible_removed": 0,
+          "flags": [
+            "UNI0E_ARTIFACT",
+            "VISUAL_REVIEW_REQUIRED"
+          ]
+        },
+        {
+          "page": 25,
+          "characters": 3372,
+          "thai_characters": 1720,
+          "invisible_removed": 0,
+          "flags": [
+            "UNI0E_ARTIFACT",
+            "VISUAL_REVIEW_REQUIRED"
+          ]
+        },
+        {
+          "page": 26,
+          "characters": 1793,
+          "thai_characters": 893,
+          "invisible_removed": 0,
+          "flags": [
+            "UNI0E_ARTIFACT",
+            "VISUAL_REVIEW_REQUIRED"
+          ]
+        },
+        {
+          "page": 27,
+          "characters": 2251,
+          "thai_characters": 1009,
+          "invisible_removed": 0,
+          "flags": [
+            "UNI0E_ARTIFACT",
+            "VISUAL_REVIEW_REQUIRED"
+          ]
+        },
+        {
+          "page": 28,
+          "characters": 2273,
+          "thai_characters": 1085,
+          "invisible_removed": 0,
+          "flags": [
+            "UNI0E_ARTIFACT",
+            "VISUAL_REVIEW_REQUIRED"
+          ]
+        },
+        {
+          "page": 29,
+          "characters": 2287,
+          "thai_characters": 1177,
+          "invisible_removed": 0,
+          "flags": [
+            "UNI0E_ARTIFACT",
+            "VISUAL_REVIEW_REQUIRED"
+          ]
+        },
+        {
+          "page": 30,
+          "characters": 2283,
+          "thai_characters": 1116,
+          "invisible_removed": 0,
+          "flags": [
+            "UNI0E_ARTIFACT",
+            "VISUAL_REVIEW_REQUIRED"
+          ]
+        },
+        {
+          "page": 31,
+          "characters": 2090,
+          "thai_characters": 1089,
+          "invisible_removed": 0,
+          "flags": [
+            "UNI0E_ARTIFACT",
+            "VISUAL_REVIEW_REQUIRED"
+          ]
+        },
+        {
+          "page": 32,
+          "characters": 1982,
+          "thai_characters": 956,
+          "invisible_removed": 0,
+          "flags": [
+            "UNI0E_ARTIFACT",
+            "VISUAL_REVIEW_REQUIRED"
+          ]
+        },
+        {
+          "page": 33,
+          "characters": 3375,
+          "thai_characters": 2147,
+          "invisible_removed": 0,
+          "flags": [
+            "UNI0E_ARTIFACT",
+            "VISUAL_REVIEW_REQUIRED"
+          ]
+        },
+        {
+          "page": 34,
+          "characters": 1617,
+          "thai_characters": 948,
+          "invisible_removed": 0,
+          "flags": [
+            "UNI0E_ARTIFACT",
+            "VISUAL_REVIEW_REQUIRED"
+          ]
+        },
+        {
+          "page": 35,
+          "characters": 1620,
+          "thai_characters": 826,
+          "invisible_removed": 0,
+          "flags": [
+            "UNI0E_ARTIFACT",
+            "VISUAL_REVIEW_REQUIRED"
+          ]
+        },
+        {
+          "page": 36,
+          "characters": 2036,
+          "thai_characters": 1066,
+          "invisible_removed": 0,
+          "flags": [
+            "UNI0E_ARTIFACT",
+            "VISUAL_REVIEW_REQUIRED"
+          ]
+        },
+        {
+          "page": 37,
+          "characters": 2397,
+          "thai_characters": 1326,
+          "invisible_removed": 0,
+          "flags": [
+            "UNI0E_ARTIFACT",
+            "VISUAL_REVIEW_REQUIRED"
+          ]
+        },
+        {
+          "page": 38,
+          "characters": 1207,
+          "thai_characters": 536,
+          "invisible_removed": 0,
+          "flags": [
+            "UNI0E_ARTIFACT",
+            "VISUAL_REVIEW_REQUIRED"
+          ]
+        },
+        {
+          "page": 39,
+          "characters": 1415,
+          "thai_characters": 496,
+          "invisible_removed": 0,
+          "flags": [
+            "UNI0E_ARTIFACT",
+            "VISUAL_REVIEW_REQUIRED"
+          ]
+        },
+        {
+          "page": 40,
+          "characters": 1046,
+          "thai_characters": 363,
+          "invisible_removed": 0,
+          "flags": [
+            "UNI0E_ARTIFACT",
+            "VISUAL_REVIEW_REQUIRED"
+          ]
+        },
+        {
+          "page": 41,
+          "characters": 2274,
+          "thai_characters": 1159,
+          "invisible_removed": 0,
+          "flags": [
+            "UNI0E_ARTIFACT",
+            "VISUAL_REVIEW_REQUIRED"
+          ]
+        },
+        {
+          "page": 42,
+          "characters": 2056,
+          "thai_characters": 918,
+          "invisible_removed": 0,
+          "flags": [
+            "UNI0E_ARTIFACT",
+            "VISUAL_REVIEW_REQUIRED"
+          ]
+        },
+        {
+          "page": 43,
+          "characters": 2959,
+          "thai_characters": 1267,
+          "invisible_removed": 0,
+          "flags": [
+            "UNI0E_ARTIFACT",
+            "VISUAL_REVIEW_REQUIRED"
+          ]
+        },
+        {
+          "page": 44,
+          "characters": 2211,
+          "thai_characters": 1061,
+          "invisible_removed": 0,
+          "flags": [
+            "UNI0E_ARTIFACT",
+            "VISUAL_REVIEW_REQUIRED"
+          ]
+        },
+        {
+          "page": 45,
+          "characters": 1988,
+          "thai_characters": 824,
+          "invisible_removed": 0,
+          "flags": [
+            "UNI0E_ARTIFACT",
+            "VISUAL_REVIEW_REQUIRED"
+          ]
+        },
+        {
+          "page": 46,
+          "characters": 2145,
+          "thai_characters": 878,
+          "invisible_removed": 0,
+          "flags": [
+            "UNI0E_ARTIFACT",
+            "VISUAL_REVIEW_REQUIRED"
+          ]
+        },
+        {
+          "page": 47,
+          "characters": 2234,
+          "thai_characters": 932,
+          "invisible_removed": 0,
+          "flags": [
+            "UNI0E_ARTIFACT",
+            "VISUAL_REVIEW_REQUIRED"
+          ]
+        },
+        {
+          "page": 48,
+          "characters": 2086,
+          "thai_characters": 776,
+          "invisible_removed": 0,
+          "flags": [
+            "UNI0E_ARTIFACT",
+            "VISUAL_REVIEW_REQUIRED"
+          ]
+        },
+        {
+          "page": 49,
+          "characters": 2449,
+          "thai_characters": 972,
+          "invisible_removed": 0,
+          "flags": [
+            "UNI0E_ARTIFACT",
+            "VISUAL_REVIEW_REQUIRED"
+          ]
+        },
+        {
+          "page": 50,
+          "characters": 2313,
+          "thai_characters": 985,
+          "invisible_removed": 0,
+          "flags": [
+            "UNI0E_ARTIFACT",
+            "VISUAL_REVIEW_REQUIRED"
+          ]
+        },
+        {
+          "page": 51,
+          "characters": 2307,
+          "thai_characters": 1188,
+          "invisible_removed": 0,
+          "flags": [
+            "UNI0E_ARTIFACT",
+            "VISUAL_REVIEW_REQUIRED"
+          ]
+        },
+        {
+          "page": 52,
+          "characters": 2283,
+          "thai_characters": 951,
+          "invisible_removed": 0,
+          "flags": [
+            "UNI0E_ARTIFACT",
+            "VISUAL_REVIEW_REQUIRED"
+          ]
+        },
+        {
+          "page": 53,
+          "characters": 2227,
+          "thai_characters": 972,
+          "invisible_removed": 0,
+          "flags": [
+            "UNI0E_ARTIFACT",
+            "VISUAL_REVIEW_REQUIRED"
+          ]
+        },
+        {
+          "page": 54,
+          "characters": 2335,
+          "thai_characters": 767,
+          "invisible_removed": 0,
+          "flags": [
+            "UNI0E_ARTIFACT",
+            "VISUAL_REVIEW_REQUIRED"
+          ]
+        },
+        {
+          "page": 55,
+          "characters": 2222,
+          "thai_characters": 798,
+          "invisible_removed": 0,
+          "flags": [
+            "UNI0E_ARTIFACT",
+            "VISUAL_REVIEW_REQUIRED"
+          ]
+        },
+        {
+          "page": 56,
+          "characters": 2690,
+          "thai_characters": 1428,
+          "invisible_removed": 0,
+          "flags": [
+            "UNI0E_ARTIFACT",
+            "VISUAL_REVIEW_REQUIRED"
+          ]
+        },
+        {
+          "page": 57,
+          "characters": 243,
+          "thai_characters": 147,
+          "invisible_removed": 0,
+          "flags": [
+            "UNI0E_ARTIFACT",
+            "VISUAL_REVIEW_REQUIRED"
+          ]
+        },
+        {
+          "page": 58,
+          "characters": 2984,
+          "thai_characters": 1831,
+          "invisible_removed": 0,
+          "flags": []
+        },
+        {
+          "page": 59,
+          "characters": 3789,
+          "thai_characters": 2421,
+          "invisible_removed": 0,
+          "flags": []
+        },
+        {
+          "page": 60,
+          "characters": 2446,
+          "thai_characters": 1391,
+          "invisible_removed": 0,
+          "flags": []
+        },
+        {
+          "page": 61,
+          "characters": 2517,
+          "thai_characters": 1547,
+          "invisible_removed": 0,
+          "flags": []
+        },
+        {
+          "page": 62,
+          "characters": 2930,
+          "thai_characters": 1813,
+          "invisible_removed": 0,
+          "flags": []
+        },
+        {
+          "page": 63,
+          "characters": 3407,
+          "thai_characters": 2112,
+          "invisible_removed": 0,
+          "flags": []
+        },
+        {
+          "page": 64,
+          "characters": 2867,
+          "thai_characters": 1736,
+          "invisible_removed": 0,
+          "flags": []
+        },
+        {
+          "page": 65,
+          "characters": 2645,
+          "thai_characters": 1565,
+          "invisible_removed": 0,
+          "flags": []
+        },
+        {
+          "page": 66,
+          "characters": 3319,
+          "thai_characters": 1923,
+          "invisible_removed": 0,
+          "flags": []
+        },
+        {
+          "page": 67,
+          "characters": 1991,
+          "thai_characters": 1084,
+          "invisible_removed": 0,
+          "flags": []
+        },
+        {
+          "page": 68,
+          "characters": 4075,
+          "thai_characters": 2434,
+          "invisible_removed": 0,
+          "flags": []
+        },
+        {
+          "page": 69,
+          "characters": 4024,
+          "thai_characters": 2441,
+          "invisible_removed": 0,
+          "flags": []
+        },
+        {
+          "page": 70,
+          "characters": 2297,
+          "thai_characters": 1350,
+          "invisible_removed": 0,
+          "flags": []
+        },
+        {
+          "page": 71,
+          "characters": 2607,
+          "thai_characters": 1764,
+          "invisible_removed": 0,
+          "flags": []
+        },
+        {
+          "page": 72,
+          "characters": 2044,
+          "thai_characters": 1314,
+          "invisible_removed": 0,
+          "flags": []
+        },
+        {
+          "page": 73,
+          "characters": 2698,
+          "thai_characters": 1672,
+          "invisible_removed": 0,
+          "flags": []
+        },
+        {
+          "page": 74,
+          "characters": 2131,
+          "thai_characters": 1388,
+          "invisible_removed": 0,
+          "flags": []
+        },
+        {
+          "page": 75,
+          "characters": 1784,
+          "thai_characters": 1110,
+          "invisible_removed": 0,
+          "flags": []
+        },
+        {
+          "page": 76,
+          "characters": 2068,
+          "thai_characters": 1309,
+          "invisible_removed": 0,
+          "flags": []
+        },
+        {
+          "page": 77,
+          "characters": 1821,
+          "thai_characters": 1207,
+          "invisible_removed": 0,
+          "flags": []
+        },
+        {
+          "page": 78,
+          "characters": 1884,
+          "thai_characters": 1285,
+          "invisible_removed": 0,
+          "flags": []
+        },
+        {
+          "page": 79,
+          "characters": 2408,
+          "thai_characters": 1575,
+          "invisible_removed": 0,
+          "flags": []
+        },
+        {
+          "page": 80,
+          "characters": 2045,
+          "thai_characters": 1295,
+          "invisible_removed": 0,
+          "flags": []
+        },
+        {
+          "page": 81,
+          "characters": 2007,
+          "thai_characters": 1282,
+          "invisible_removed": 0,
+          "flags": []
+        },
+        {
+          "page": 82,
+          "characters": 2158,
+          "thai_characters": 1364,
+          "invisible_removed": 0,
+          "flags": []
+        },
+        {
+          "page": 83,
+          "characters": 2419,
+          "thai_characters": 1550,
+          "invisible_removed": 0,
+          "flags": []
+        },
+        {
+          "page": 84,
+          "characters": 2149,
+          "thai_characters": 1448,
+          "invisible_removed": 0,
+          "flags": []
+        },
+        {
+          "page": 85,
+          "characters": 1856,
+          "thai_characters": 1280,
+          "invisible_removed": 0,
+          "flags": []
+        },
+        {
+          "page": 86,
+          "characters": 2439,
+          "thai_characters": 1585,
+          "invisible_removed": 0,
+          "flags": []
+        },
+        {
+          "page": 87,
+          "characters": 2154,
+          "thai_characters": 1402,
+          "invisible_removed": 0,
+          "flags": []
+        },
+        {
+          "page": 88,
+          "characters": 1173,
+          "thai_characters": 757,
+          "invisible_removed": 0,
+          "flags": []
+        },
+        {
+          "page": 89,
+          "characters": 1429,
+          "thai_characters": 696,
+          "invisible_removed": 0,
+          "flags": [
+            "UNI0E_ARTIFACT",
+            "VISUAL_REVIEW_REQUIRED"
+          ]
+        }
+      ],
+      "segments": [
+        {
+          "id": "structure-and-layout",
+          "pages": [
+            5,
+            20
+          ],
+          "topics": [
+            "structure",
+            "page layout",
+            "heading",
+            "figure",
+            "table",
+            "Thai writing"
+          ]
+        },
+        {
+          "id": "citation-and-bibliography",
+          "pages": [
+            21,
+            89
+          ],
+          "topics": [
+            "citation",
+            "bibliography",
+            "reference"
+          ]
+        }
+      ],
+      "curated_references": [
+        "editorial-standards.md",
+        "source-map.md"
+      ],
+      "chapters_detected": 4,
+      "chapter_headings_sample": [
+        "บทที่ 1 ตําราและหนังสือ  1",
+        "บทที่ 2 การอ4uni0E495alt2างอิงและบรรณานุกรม 17",
+        "บทที่ 3  หลักการเว4uni0E495alt2นวรรคและการเขียนที่ถูกต4uni0E495alt2อง 54",
+        "บทที่ 1  ตําราและหนังสือ หนฒ]kfศฉจ็โiR…2า  1",
+        "บทที่ 1",
+        "บทที่ 1  ตําราและหนังสือ หนฒ]kfศฉจ็โiR…2า  2",
+        "บทที่ 1",
+        "บทที่ 1  ตําราและหนังสือ หนฒ]kfศฉจ็โiR…2า  3",
+        "บทที่ 1",
+        "บทที่ 1  ตําราและหนังสือ หน้า  4"
+      ],
+      "has_toc": false,
+      "flags": [
+        "UNI0E_ARTIFACT",
+        "VISUAL_REVIEW_REQUIRED"
+      ],
+      "verification_status": "VISUAL_REVIEW_REQUIRED",
+      "curated_replacement_allowed": false,
+      "incremental_action": "unchanged"
+    },
+    {
+      "filename": "คู่มือการเขียนตำราหนังสือมหิดล.pdf",
+      "sha256": "affce2d017459b6f692b310db299cf50489f5b355aba94fa5163ea0af4f09b93",
+      "bytes": 11059830,
+      "page_count": 48,
+      "extraction_method": [
+        "pypdf"
+      ],
+      "cache": ".reference-cache/affce2d017459b6f692b310db299cf50489f5b355aba94fa5163ea0af4f09b93",
+      "page_map": [
+        {
+          "page": 1,
+          "characters": 0,
+          "thai_characters": 0,
+          "invisible_removed": 0,
+          "flags": [
+            "EMPTY_EXTRACTION",
+            "OCR_REQUIRED",
+            "VISUAL_REVIEW_REQUIRED"
+          ]
+        },
+        {
+          "page": 2,
+          "characters": 0,
+          "thai_characters": 0,
+          "invisible_removed": 0,
+          "flags": [
+            "EMPTY_EXTRACTION",
+            "OCR_REQUIRED",
+            "VISUAL_REVIEW_REQUIRED"
+          ]
+        },
+        {
+          "page": 3,
+          "characters": 995,
+          "thai_characters": 626,
+          "invisible_removed": 0,
+          "flags": [
+            "REPLACEMENT_GLYPH",
+            "VISUAL_REVIEW_REQUIRED"
+          ]
+        },
+        {
+          "page": 4,
+          "characters": 2211,
+          "thai_characters": 2016,
+          "invisible_removed": 0,
+          "flags": [
+            "REPLACEMENT_GLYPH",
+            "VISUAL_REVIEW_REQUIRED"
+          ]
+        },
+        {
+          "page": 5,
+          "characters": 228,
+          "thai_characters": 175,
+          "invisible_removed": 0,
+          "flags": [
+            "REPLACEMENT_GLYPH",
+            "VISUAL_REVIEW_REQUIRED"
+          ]
+        },
+        {
+          "page": 6,
+          "characters": 20,
+          "thai_characters": 17,
+          "invisible_removed": 0,
+          "flags": []
+        },
+        {
+          "page": 7,
+          "characters": 1615,
+          "thai_characters": 1423,
+          "invisible_removed": 0,
+          "flags": [
+            "REPLACEMENT_GLYPH",
+            "VISUAL_REVIEW_REQUIRED"
+          ]
+        },
+        {
+          "page": 8,
+          "characters": 1130,
+          "thai_characters": 944,
+          "invisible_removed": 0,
+          "flags": [
+            "REPLACEMENT_GLYPH",
+            "VISUAL_REVIEW_REQUIRED"
+          ]
+        },
+        {
+          "page": 9,
+          "characters": 0,
+          "thai_characters": 0,
+          "invisible_removed": 0,
+          "flags": [
+            "EMPTY_EXTRACTION",
+            "OCR_REQUIRED",
+            "VISUAL_REVIEW_REQUIRED"
+          ]
+        },
+        {
+          "page": 10,
+          "characters": 31,
+          "thai_characters": 19,
+          "invisible_removed": 0,
+          "flags": []
+        },
+        {
+          "page": 11,
+          "characters": 847,
+          "thai_characters": 693,
+          "invisible_removed": 0,
+          "flags": [
+            "REPLACEMENT_GLYPH",
+            "VISUAL_REVIEW_REQUIRED"
+          ]
+        },
+        {
+          "page": 12,
+          "characters": 1679,
+          "thai_characters": 1303,
+          "invisible_removed": 0,
+          "flags": [
+            "REPLACEMENT_GLYPH",
+            "VISUAL_REVIEW_REQUIRED"
+          ]
+        },
+        {
+          "page": 13,
+          "characters": 2944,
+          "thai_characters": 1671,
+          "invisible_removed": 0,
+          "flags": [
+            "REPLACEMENT_GLYPH",
+            "VISUAL_REVIEW_REQUIRED"
+          ]
+        },
+        {
+          "page": 14,
+          "characters": 1851,
+          "thai_characters": 1577,
+          "invisible_removed": 0,
+          "flags": [
+            "REPLACEMENT_GLYPH",
+            "VISUAL_REVIEW_REQUIRED"
+          ]
+        },
+        {
+          "page": 15,
+          "characters": 1871,
+          "thai_characters": 1459,
+          "invisible_removed": 0,
+          "flags": [
+            "REPLACEMENT_GLYPH",
+            "VISUAL_REVIEW_REQUIRED"
+          ]
+        },
+        {
+          "page": 16,
+          "characters": 766,
+          "thai_characters": 437,
+          "invisible_removed": 0,
+          "flags": []
+        },
+        {
+          "page": 17,
+          "characters": 1775,
+          "thai_characters": 1389,
+          "invisible_removed": 0,
+          "flags": [
+            "REPLACEMENT_GLYPH",
+            "VISUAL_REVIEW_REQUIRED"
+          ]
+        },
+        {
+          "page": 18,
+          "characters": 524,
+          "thai_characters": 440,
+          "invisible_removed": 0,
+          "flags": [
+            "REPLACEMENT_GLYPH",
+            "VISUAL_REVIEW_REQUIRED"
+          ]
+        },
+        {
+          "page": 19,
+          "characters": 851,
+          "thai_characters": 273,
+          "invisible_removed": 0,
+          "flags": [
+            "REPLACEMENT_GLYPH",
+            "VISUAL_REVIEW_REQUIRED"
+          ]
+        },
+        {
+          "page": 20,
+          "characters": 1636,
+          "thai_characters": 1209,
+          "invisible_removed": 0,
+          "flags": [
+            "REPLACEMENT_GLYPH",
+            "VISUAL_REVIEW_REQUIRED"
+          ]
+        },
+        {
+          "page": 21,
+          "characters": 1485,
+          "thai_characters": 973,
+          "invisible_removed": 0,
+          "flags": [
+            "REPLACEMENT_GLYPH",
+            "VISUAL_REVIEW_REQUIRED"
+          ]
+        },
+        {
+          "page": 22,
+          "characters": 1242,
+          "thai_characters": 450,
+          "invisible_removed": 0,
+          "flags": [
+            "REPLACEMENT_GLYPH",
+            "VISUAL_REVIEW_REQUIRED"
+          ]
+        },
+        {
+          "page": 23,
+          "characters": 1647,
+          "thai_characters": 705,
+          "invisible_removed": 0,
+          "flags": [
+            "REPLACEMENT_GLYPH",
+            "VISUAL_REVIEW_REQUIRED"
+          ]
+        },
+        {
+          "page": 24,
+          "characters": 2127,
+          "thai_characters": 996,
+          "invisible_removed": 0,
+          "flags": [
+            "REPLACEMENT_GLYPH",
+            "VISUAL_REVIEW_REQUIRED"
+          ]
+        },
+        {
+          "page": 25,
+          "characters": 1536,
+          "thai_characters": 873,
+          "invisible_removed": 0,
+          "flags": [
+            "REPLACEMENT_GLYPH",
+            "VISUAL_REVIEW_REQUIRED"
+          ]
+        },
+        {
+          "page": 26,
+          "characters": 1374,
+          "thai_characters": 579,
+          "invisible_removed": 0,
+          "flags": [
+            "REPLACEMENT_GLYPH",
+            "VISUAL_REVIEW_REQUIRED"
+          ]
+        },
+        {
+          "page": 27,
+          "characters": 1794,
+          "thai_characters": 707,
+          "invisible_removed": 0,
+          "flags": [
+            "REPLACEMENT_GLYPH",
+            "VISUAL_REVIEW_REQUIRED"
+          ]
+        },
+        {
+          "page": 28,
+          "characters": 1401,
+          "thai_characters": 565,
+          "invisible_removed": 0,
+          "flags": [
+            "REPLACEMENT_GLYPH",
+            "VISUAL_REVIEW_REQUIRED"
+          ]
+        },
+        {
+          "page": 29,
+          "characters": 0,
+          "thai_characters": 0,
+          "invisible_removed": 0,
+          "flags": [
+            "EMPTY_EXTRACTION",
+            "OCR_REQUIRED",
+            "VISUAL_REVIEW_REQUIRED"
+          ]
+        },
+        {
+          "page": 30,
+          "characters": 36,
+          "thai_characters": 33,
+          "invisible_removed": 0,
+          "flags": []
+        },
+        {
+          "page": 31,
+          "characters": 1034,
+          "thai_characters": 775,
+          "invisible_removed": 0,
+          "flags": [
+            "REPLACEMENT_GLYPH",
+            "VISUAL_REVIEW_REQUIRED"
+          ]
+        },
+        {
+          "page": 32,
+          "characters": 1700,
+          "thai_characters": 1413,
+          "invisible_removed": 0,
+          "flags": [
+            "REPLACEMENT_GLYPH",
+            "VISUAL_REVIEW_REQUIRED"
+          ]
+        },
+        {
+          "page": 33,
+          "characters": 1315,
+          "thai_characters": 955,
+          "invisible_removed": 0,
+          "flags": [
+            "REPLACEMENT_GLYPH",
+            "VISUAL_REVIEW_REQUIRED"
+          ]
+        },
+        {
+          "page": 34,
+          "characters": 1582,
+          "thai_characters": 1298,
+          "invisible_removed": 0,
+          "flags": [
+            "REPLACEMENT_GLYPH",
+            "VISUAL_REVIEW_REQUIRED"
+          ]
+        },
+        {
+          "page": 35,
+          "characters": 1097,
+          "thai_characters": 648,
+          "invisible_removed": 0,
+          "flags": [
+            "REPLACEMENT_GLYPH",
+            "VISUAL_REVIEW_REQUIRED"
+          ]
+        },
+        {
+          "page": 36,
+          "characters": 1485,
+          "thai_characters": 998,
+          "invisible_removed": 0,
+          "flags": [
+            "REPLACEMENT_GLYPH",
+            "VISUAL_REVIEW_REQUIRED"
+          ]
+        },
+        {
+          "page": 37,
+          "characters": 713,
+          "thai_characters": 523,
+          "invisible_removed": 0,
+          "flags": [
+            "REPLACEMENT_GLYPH",
+            "VISUAL_REVIEW_REQUIRED"
+          ]
+        },
+        {
+          "page": 38,
+          "characters": 600,
+          "thai_characters": 331,
+          "invisible_removed": 0,
+          "flags": [
+            "REPLACEMENT_GLYPH",
+            "VISUAL_REVIEW_REQUIRED"
+          ]
+        },
+        {
+          "page": 39,
+          "characters": 486,
+          "thai_characters": 266,
+          "invisible_removed": 0,
+          "flags": [
+            "REPLACEMENT_GLYPH",
+            "VISUAL_REVIEW_REQUIRED"
+          ]
+        },
+        {
+          "page": 40,
+          "characters": 879,
+          "thai_characters": 737,
+          "invisible_removed": 0,
+          "flags": [
+            "REPLACEMENT_GLYPH",
+            "VISUAL_REVIEW_REQUIRED"
+          ]
+        },
+        {
+          "page": 41,
+          "characters": 438,
+          "thai_characters": 372,
+          "invisible_removed": 0,
+          "flags": [
+            "REPLACEMENT_GLYPH",
+            "VISUAL_REVIEW_REQUIRED"
+          ]
+        },
+        {
+          "page": 42,
+          "characters": 1238,
+          "thai_characters": 1014,
+          "invisible_removed": 0,
+          "flags": [
+            "REPLACEMENT_GLYPH",
+            "VISUAL_REVIEW_REQUIRED"
+          ]
+        },
+        {
+          "page": 43,
+          "characters": 2004,
+          "thai_characters": 839,
+          "invisible_removed": 0,
+          "flags": [
+            "REPLACEMENT_GLYPH",
+            "VISUAL_REVIEW_REQUIRED"
+          ]
+        },
+        {
+          "page": 44,
+          "characters": 913,
+          "thai_characters": 775,
+          "invisible_removed": 0,
+          "flags": [
+            "REPLACEMENT_GLYPH",
+            "VISUAL_REVIEW_REQUIRED"
+          ]
+        },
+        {
+          "page": 45,
+          "characters": 35,
+          "thai_characters": 27,
+          "invisible_removed": 0,
+          "flags": [
+            "REPLACEMENT_GLYPH",
+            "VISUAL_REVIEW_REQUIRED"
+          ]
+        },
+        {
+          "page": 46,
+          "characters": 35,
+          "thai_characters": 27,
+          "invisible_removed": 0,
+          "flags": [
+            "REPLACEMENT_GLYPH",
+            "VISUAL_REVIEW_REQUIRED"
+          ]
+        },
+        {
+          "page": 47,
+          "characters": 35,
+          "thai_characters": 27,
+          "invisible_removed": 0,
+          "flags": [
+            "REPLACEMENT_GLYPH",
+            "VISUAL_REVIEW_REQUIRED"
+          ]
+        },
+        {
+          "page": 48,
+          "characters": 0,
+          "thai_characters": 0,
+          "invisible_removed": 0,
+          "flags": [
+            "EMPTY_EXTRACTION",
+            "OCR_REQUIRED",
+            "VISUAL_REVIEW_REQUIRED"
+          ]
+        }
+      ],
+      "segments": [
+        {
+          "id": "book-components-and-chapters",
+          "pages": [
+            7,
+            28
+          ],
+          "topics": [
+            "book component",
+            "chapter",
+            "Thai",
+            "figure",
+            "table"
+          ]
+        },
+        {
+          "id": "references-and-index",
+          "pages": [
+            31,
+            36
+          ],
+          "topics": [
+            "citation",
+            "reference",
+            "bibliography",
+            "index"
+          ]
+        }
+      ],
+      "curated_references": [
+        "editorial-standards.md",
+        "source-map.md"
+      ],
+      "chapters_detected": 0,
+      "chapter_headings_sample": [],
+      "has_toc": false,
+      "flags": [
+        "EMPTY_EXTRACTION",
+        "OCR_REQUIRED",
+        "REPLACEMENT_GLYPH",
+        "VISUAL_REVIEW_REQUIRED"
+      ],
+      "verification_status": "VISUAL_REVIEW_REQUIRED",
+      "curated_replacement_allowed": false,
+      "incremental_action": "unchanged"
+    },
+    {
+      "filename": "ตำราหนังสือ.pdf",
+      "sha256": "cb361bc422c8a184af618c9d0533ae3aa61454c202f54f1f8c7d0df5016da88e",
+      "bytes": 113196,
+      "page_count": 4,
+      "extraction_method": [
+        "pypdf"
+      ],
+      "cache": ".reference-cache/cb361bc422c8a184af618c9d0533ae3aa61454c202f54f1f8c7d0df5016da88e",
+      "page_map": [
+        {
+          "page": 1,
+          "characters": 2443,
+          "thai_characters": 2196,
+          "invisible_removed": 0,
+          "flags": []
+        },
+        {
+          "page": 2,
+          "characters": 1082,
+          "thai_characters": 931,
+          "invisible_removed": 0,
+          "flags": []
+        },
+        {
+          "page": 3,
+          "characters": 2467,
+          "thai_characters": 2237,
+          "invisible_removed": 0,
+          "flags": []
+        },
+        {
+          "page": 4,
+          "characters": 1526,
+          "thai_characters": 1360,
+          "invisible_removed": 0,
+          "flags": []
+        }
+      ],
+      "segments": [
+        {
+          "id": "definitions-and-quality-levels",
+          "pages": [
+            1,
+            4
+          ],
+          "topics": [
+            "document type",
+            "definition",
+            "B",
+            "A",
+            "A+",
+            "quality"
+          ]
+        }
+      ],
+      "curated_references": [
+        "document-types-and-quality.md",
+        "source-map.md"
+      ],
+      "chapters_detected": 0,
+      "chapter_headings_sample": [],
+      "has_toc": false,
+      "flags": [],
+      "verification_status": "EXTRACTED_PENDING_VERIFICATION",
+      "curated_replacement_allowed": false,
+      "incremental_action": "unchanged"
+    },
+    {
+      "filename": "ประกาศประเมินการสอน.pdf",
+      "sha256": "c85a96075b98a36e7ab4d999cfe43ebc15983eb7648a5163e7d405c023e3e845",
+      "bytes": 425359,
+      "page_count": 11,
+      "extraction_method": [
+        "pypdf"
+      ],
+      "cache": ".reference-cache/c85a96075b98a36e7ab4d999cfe43ebc15983eb7648a5163e7d405c023e3e845",
+      "page_map": [
+        {
+          "page": 1,
+          "characters": 0,
+          "thai_characters": 0,
+          "invisible_removed": 0,
+          "flags": [
+            "EMPTY_EXTRACTION",
+            "OCR_REQUIRED",
+            "VISUAL_REVIEW_REQUIRED"
+          ]
+        },
+        {
+          "page": 2,
+          "characters": 0,
+          "thai_characters": 0,
+          "invisible_removed": 0,
+          "flags": [
+            "EMPTY_EXTRACTION",
+            "OCR_REQUIRED",
+            "VISUAL_REVIEW_REQUIRED"
+          ]
+        },
+        {
+          "page": 3,
+          "characters": 0,
+          "thai_characters": 0,
+          "invisible_removed": 0,
+          "flags": [
+            "EMPTY_EXTRACTION",
+            "OCR_REQUIRED",
+            "VISUAL_REVIEW_REQUIRED"
+          ]
+        },
+        {
+          "page": 4,
+          "characters": 0,
+          "thai_characters": 0,
+          "invisible_removed": 0,
+          "flags": [
+            "EMPTY_EXTRACTION",
+            "OCR_REQUIRED",
+            "VISUAL_REVIEW_REQUIRED"
+          ]
+        },
+        {
+          "page": 5,
+          "characters": 0,
+          "thai_characters": 0,
+          "invisible_removed": 0,
+          "flags": [
+            "EMPTY_EXTRACTION",
+            "OCR_REQUIRED",
+            "VISUAL_REVIEW_REQUIRED"
+          ]
+        },
+        {
+          "page": 6,
+          "characters": 0,
+          "thai_characters": 0,
+          "invisible_removed": 0,
+          "flags": [
+            "EMPTY_EXTRACTION",
+            "OCR_REQUIRED",
+            "VISUAL_REVIEW_REQUIRED"
+          ]
+        },
+        {
+          "page": 7,
+          "characters": 0,
+          "thai_characters": 0,
+          "invisible_removed": 0,
+          "flags": [
+            "EMPTY_EXTRACTION",
+            "OCR_REQUIRED",
+            "VISUAL_REVIEW_REQUIRED"
+          ]
+        },
+        {
+          "page": 8,
+          "characters": 0,
+          "thai_characters": 0,
+          "invisible_removed": 0,
+          "flags": [
+            "EMPTY_EXTRACTION",
+            "OCR_REQUIRED",
+            "VISUAL_REVIEW_REQUIRED"
+          ]
+        },
+        {
+          "page": 9,
+          "characters": 0,
+          "thai_characters": 0,
+          "invisible_removed": 0,
+          "flags": [
+            "EMPTY_EXTRACTION",
+            "OCR_REQUIRED",
+            "VISUAL_REVIEW_REQUIRED"
+          ]
+        },
+        {
+          "page": 10,
+          "characters": 0,
+          "thai_characters": 0,
+          "invisible_removed": 0,
+          "flags": [
+            "EMPTY_EXTRACTION",
+            "OCR_REQUIRED",
+            "VISUAL_REVIEW_REQUIRED"
+          ]
+        },
+        {
+          "page": 11,
+          "characters": 0,
+          "thai_characters": 0,
+          "invisible_removed": 0,
+          "flags": [
+            "EMPTY_EXTRACTION",
+            "OCR_REQUIRED",
+            "VISUAL_REVIEW_REQUIRED"
+          ]
+        }
+      ],
+      "segments": [
+        {
+          "id": "teaching-regulations",
+          "pages": [
+            1,
+            4
+          ],
+          "topics": [
+            "teaching evaluation",
+            "regulation",
+            "definition"
+          ]
+        },
+        {
+          "id": "teaching-document-rubric",
+          "pages": [
+            7,
+            11
+          ],
+          "topics": [
+            "teaching document",
+            "rubric",
+            "score",
+            "criteria"
+          ]
+        }
+      ],
+      "curated_references": [
+        "teaching-document-criteria.md",
+        "qc-rubric.md",
+        "source-map.md"
+      ],
+      "chapters_detected": 0,
+      "chapter_headings_sample": [],
+      "has_toc": false,
+      "flags": [
+        "EMPTY_EXTRACTION",
+        "OCR_REQUIRED",
+        "VISUAL_REVIEW_REQUIRED"
+      ],
+      "verification_status": "VISUAL_REVIEW_REQUIRED",
+      "curated_replacement_allowed": false,
+      "incremental_action": "unchanged"
+    },
+    {
+      "filename": "แนวทางการประเมิน.pdf",
+      "sha256": "e4941fd062ab659c5d5aea69e3e3ff7a06a911cfcedf3ab20f8ea90a17346246",
+      "bytes": 449456,
+      "page_count": 21,
+      "extraction_method": [
+        "pypdf"
+      ],
+      "cache": ".reference-cache/e4941fd062ab659c5d5aea69e3e3ff7a06a911cfcedf3ab20f8ea90a17346246",
+      "page_map": [
+        {
+          "page": 1,
+          "characters": 127,
+          "thai_characters": 114,
+          "invisible_removed": 0,
+          "flags": []
+        },
+        {
+          "page": 2,
+          "characters": 343,
+          "thai_characters": 281,
+          "invisible_removed": 0,
+          "flags": []
+        },
+        {
+          "page": 3,
+          "characters": 476,
+          "thai_characters": 401,
+          "invisible_removed": 0,
+          "flags": []
+        },
+        {
+          "page": 4,
+          "characters": 272,
+          "thai_characters": 229,
+          "invisible_removed": 0,
+          "flags": []
+        },
+        {
+          "page": 5,
+          "characters": 146,
+          "thai_characters": 120,
+          "invisible_removed": 0,
+          "flags": []
+        },
+        {
+          "page": 6,
+          "characters": 341,
+          "thai_characters": 111,
+          "invisible_removed": 0,
+          "flags": []
+        },
+        {
+          "page": 7,
+          "characters": 177,
+          "thai_characters": 115,
+          "invisible_removed": 0,
+          "flags": []
+        },
+        {
+          "page": 8,
+          "characters": 256,
+          "thai_characters": 211,
+          "invisible_removed": 0,
+          "flags": []
+        },
+        {
+          "page": 9,
+          "characters": 208,
+          "thai_characters": 174,
+          "invisible_removed": 0,
+          "flags": []
+        },
+        {
+          "page": 10,
+          "characters": 437,
+          "thai_characters": 382,
+          "invisible_removed": 0,
+          "flags": []
+        },
+        {
+          "page": 11,
+          "characters": 422,
+          "thai_characters": 356,
+          "invisible_removed": 0,
+          "flags": []
+        },
+        {
+          "page": 12,
+          "characters": 352,
+          "thai_characters": 306,
+          "invisible_removed": 0,
+          "flags": []
+        },
+        {
+          "page": 13,
+          "characters": 655,
+          "thai_characters": 593,
+          "invisible_removed": 0,
+          "flags": []
+        },
+        {
+          "page": 14,
+          "characters": 460,
+          "thai_characters": 383,
+          "invisible_removed": 0,
+          "flags": []
+        },
+        {
+          "page": 15,
+          "characters": 385,
+          "thai_characters": 340,
+          "invisible_removed": 0,
+          "flags": []
+        },
+        {
+          "page": 16,
+          "characters": 408,
+          "thai_characters": 345,
+          "invisible_removed": 0,
+          "flags": []
+        },
+        {
+          "page": 17,
+          "characters": 143,
+          "thai_characters": 124,
+          "invisible_removed": 0,
+          "flags": []
+        },
+        {
+          "page": 18,
+          "characters": 127,
+          "thai_characters": 106,
+          "invisible_removed": 0,
+          "flags": []
+        },
+        {
+          "page": 19,
+          "characters": 790,
+          "thai_characters": 743,
+          "invisible_removed": 0,
+          "flags": []
+        },
+        {
+          "page": 20,
+          "characters": 654,
+          "thai_characters": 602,
+          "invisible_removed": 0,
+          "flags": []
+        },
+        {
+          "page": 21,
+          "characters": 11,
+          "thai_characters": 0,
+          "invisible_removed": 0,
+          "flags": []
+        }
+      ],
+      "segments": [
+        {
+          "id": "evaluation-practice",
+          "pages": [
+            6,
+            20
+          ],
+          "topics": [
+            "evaluation",
+            "ethics",
+            "copyright",
+            "failure pattern",
+            "length"
+          ]
+        }
+      ],
+      "curated_references": [
+        "editorial-standards.md",
+        "qc-rubric.md",
+        "source-map.md"
+      ],
+      "chapters_detected": 0,
+      "chapter_headings_sample": [],
+      "has_toc": false,
+      "flags": [],
+      "verification_status": "EXTRACTED_PENDING_VERIFICATION",
+      "curated_replacement_allowed": false,
+      "incremental_action": "unchanged"
+    }
+  ]
+}

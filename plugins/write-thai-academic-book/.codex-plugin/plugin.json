@@ -1,25 +1,36 @@
 {
   "name": "write-thai-academic-book",
-  "version": "1.0.0",
-  "description": "Task-based drafting and Level A quality control for Thai teaching notes, books, and textbooks.",
+  "version": "1.2.0",
+  "description": "Style-preserving drafting and Level A quality control for Thai teaching notes, books, and textbooks.",
   "author": {
     "name": "rijjina",
     "url": "https://github.com/rijjina"
   },
+  "homepage": "https://github.com/rijjina/book_drafter",
+  "repository": "https://github.com/rijjina/book_drafter",
+  "keywords": ["thai", "academic-writing", "book", "textbook", "teaching-notes"],
   "skills": "./skills/",
   "interface": {
     "displayName": "Thai Academic Book Writer",
-    "shortDescription": "Draft Thai academic manuscripts at Level A",
-    "longDescription": "Create, audit, revise, and quality-check Thai teaching notes, books, and textbooks through independent tasks, reusable artifacts, deterministic gates, and explicit human approval.",
+    "shortDescription": "Preserve style in Level A Thai manuscripts",
+    "longDescription": "Create, audit, revise, and quality-check Thai teaching notes, books, and textbooks while preserving sound authorial style through deterministic profiles, approval-free review reports, gated production tasks, and reusable artifacts.",
     "developerName": "rijjina",
     "category": "Education",
     "capabilities": [
       "Academic drafting",
       "Manuscript audit",
+      "Style profile extraction",
+      "Style-preserving revision",
+      "Approval-free author review reports",
       "Level A quality control",
       "Human approval gates"
     ],
-    "defaultPrompt": "Use $write-thai-academic-book to perform one approved task for a Thai academic manuscript and stop for human review.",
+    "websiteURL": "https://github.com/rijjina/book_drafter",
+    "defaultPrompt": [
+      "Review my Thai academic manuscript and give prioritized author-edit recommendations.",
+      "Develop the next approved task in my Thai academic book workflow.",
+      "Run final QC without producing DOCX until I explicitly approve export."
+    ],
     "brandColor": "#0E7C86"
   }
 }
