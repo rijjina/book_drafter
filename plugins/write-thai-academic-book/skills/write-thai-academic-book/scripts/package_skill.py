@@ -11,7 +11,6 @@ import argparse
 import hashlib
 import json
 import shutil
-import stat
 import tempfile
 import zipfile
 from pathlib import Path
@@ -97,30 +96,37 @@ def validate_export_target(source: Path, export: Path) -> None:
         raise RuntimeError(f"Export target overlaps canonical source: {export}")
 
 
-def remove_tree(path: Path) -> None:
-    """Remove a validated export tree, including OneDrive read-only entries."""
-
-    def make_writable_and_retry(function, target, _error):
-        Path(target).chmod(stat.S_IWRITE)
-        function(target)
-
-    shutil.rmtree(path, onexc=make_writable_and_retry)
-
-
 def sync_export(source: Path, export: Path) -> None:
+    """Synchronize files in place so cloud folders do not observe a tree deletion."""
+
     validate_export_target(source, export)
-    export.parent.mkdir(parents=True, exist_ok=True)
-    with tempfile.TemporaryDirectory(
-        prefix="write-thai-academic-book-package-", dir=str(export.parent)
-    ) as temp_name:
-        staged = Path(temp_name) / export.name
-        for relative, source_path in included_files(source).items():
-            target = staged / relative
-            target.parent.mkdir(parents=True, exist_ok=True)
-            shutil.copy2(source_path, target)
-        if export.exists():
-            remove_tree(export)
-        staged.replace(export)
+    export.mkdir(parents=True, exist_ok=True)
+    canonical = included_files(source)
+    exported = {
+        path.relative_to(export).as_posix(): path
+        for path in export.rglob("*")
+        if path.is_file()
+    }
+
+    for relative, target in exported.items():
+        if relative not in canonical:
+            target.chmod(0o666)
+            target.unlink()
+
+    for relative, source_path in canonical.items():
+        target = export / relative
+        target.parent.mkdir(parents=True, exist_ok=True)
+        if target.exists():
+            target.chmod(0o666)
+        shutil.copy2(source_path, target)
+
+    for directory in sorted(
+        (path for path in export.rglob("*") if path.is_dir()),
+        key=lambda path: len(path.parts),
+        reverse=True,
+    ):
+        if not any(directory.iterdir()):
+            directory.rmdir()
 
 
 def build_zip(source: Path, output: Path) -> None:
