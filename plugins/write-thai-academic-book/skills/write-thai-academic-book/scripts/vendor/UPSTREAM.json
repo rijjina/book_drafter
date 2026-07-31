@@ -1,0 +1,13 @@
+{
+  "name": "book-to-skill",
+  "repository": "https://github.com/virgiliojr94/book-to-skill",
+  "version": "1.3.0",
+  "commit": "e087255f187c4fd3a5cdbb1cf1a11e09cdb84b46",
+  "license": "MIT",
+  "license_file": "LICENSE.md",
+  "vendored_paths": [
+    "book_to_skill",
+    "tools/scan_generated_skill.py"
+  ],
+  "policy": "Vendored files are unchanged. Local integration code lives outside scripts/vendor."
+}

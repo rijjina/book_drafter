@@ -1,5 +1,11 @@
 {
   "name": "write-thai-academic-book",
-  "version": "1.0.0",
-  "description": "Task-based drafting and Level A quality control for Thai teaching notes, books, and textbooks."
+  "version": "1.2.0",
+  "description": "Style-preserving drafting and Level A quality control for Thai teaching notes, books, and textbooks.",
+  "author": {
+    "name": "rijjina",
+    "url": "https://github.com/rijjina"
+  },
+  "homepage": "https://github.com/rijjina/book_drafter",
+  "repository": "https://github.com/rijjina/book_drafter"
 }

@@ -8,10 +8,13 @@ import hashlib
 import re
 import shutil
 import sys
+import tempfile
 import zipfile
 from dataclasses import dataclass
 from pathlib import Path
 from xml.etree import ElementTree as ET
+
+from extract_style_profile import extract_style_profile
 
 
 DOCUMENT_TYPES = ("teaching-notes", "book", "textbook")
@@ -176,8 +179,9 @@ def main() -> int:
     source_dir = root / "source"
     original = source_dir / "original-manuscript.docx"
     report_path = source_dir / "import-report.md"
+    style_profile_path = source_dir / "style-profile.md"
     approval_path = source_dir / "approval.md"
-    if not args.rebuild and (original.exists() or report_path.exists()):
+    if not args.rebuild and (original.exists() or report_path.exists() or style_profile_path.exists()):
         print("Import artifacts already exist; use --rebuild only after explicit approval.", file=sys.stderr)
         return 2
 
@@ -197,6 +201,15 @@ def main() -> int:
             f"Chapter numbers are not sequential from 1: {', '.join(map(str, numbers))}."
         )
 
+    try:
+        with tempfile.TemporaryDirectory() as temp_dir:
+            temporary_profile = Path(temp_dir) / "style-profile.md"
+            extract_style_profile(source_path, temporary_profile)
+            style_profile_bytes = temporary_profile.read_bytes()
+    except (ValueError, OSError, KeyError, zipfile.BadZipFile, ET.ParseError) as exc:
+        print(f"Style profile extraction failed: {exc}", file=sys.stderr)
+        return 3
+
     source_hash = sha256(source_path)
     source_dir.mkdir(parents=True, exist_ok=True)
     if original.exists():
@@ -212,6 +225,8 @@ def main() -> int:
     if source_hash != original_hash:
         print("Copied manuscript checksum mismatch.", file=sys.stderr)
         return 3
+
+    style_profile_path.write_bytes(style_profile_bytes)
 
     created: list[str] = []
     if not blockers:
@@ -242,10 +257,12 @@ def main() -> int:
         f"- Input: `{source_path}`",
         f"- Preserved original: `source/original-manuscript.docx`",
         f"- SHA-256: `{original_hash}`",
+        "- Style profile: `source/style-profile.md`",
         f"- Document type: {args.document_type}",
         f"- Import status: {status}",
         f"- Detected chapters: {len(numbers)}",
         "- Extraction note: DOCX tables were converted to Markdown for review; the original DOCX remains authoritative for layout.",
+        "- Style note: `source/style-profile.md` is a deterministic baseline for preserving authorial voice and structure during QC and revision.",
         "",
         "## Chapter Artifacts",
         "",

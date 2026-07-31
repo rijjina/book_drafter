@@ -1,0 +1,52 @@
+{
+  "version": 1,
+  "purpose": "Regression inventory for governing rules retained after progressive-disclosure restructuring.",
+  "files": {
+    "document-types-and-quality.md": [
+      "## ตำรา",
+      "## หนังสือ",
+      "## Quality Level B",
+      "## Quality Level A",
+      "## Quality Level A+",
+      "## Publication And Evidence",
+      "## Reuse Restriction"
+    ],
+    "teaching-document-criteria.md": [
+      "## Document Distinction",
+      "## Use Evidence",
+      "## Eight Evaluation Criteria",
+      "## Scoring",
+      "blocker",
+      "## Internal A-Equivalent Production Target"
+    ],
+    "editorial-standards.md": [
+      "## Whole-Work Structure",
+      "## Chapter Architecture",
+      "## Content Quality",
+      "## Thai Language",
+      "## Figures",
+      "## Tables",
+      "## Citations And References",
+      "## Index And Navigation"
+    ],
+    "qc-rubric.md": [
+      "## Status Scale",
+      "## Automatic Blockers",
+      "## Outline Gate",
+      "## Chapter Gate",
+      "## Final Gate For ตำรา/หนังสือ",
+      "## Final Gate For Teaching Documents",
+      "## QC Report Rule"
+    ],
+    "source-map.md": [
+      "## Selection Rule",
+      "ตำราหนังสือ.pdf",
+      "ประกาศประเมินการสอน.pdf",
+      "แนวทางการประเมิน.pdf",
+      "คู่มือการเขียนตำราหนังสือมหิดล.pdf",
+      "คู่มือการเขียนตำราหนังสือ.pdf",
+      "PDF pp.",
+      "## Cautions"
+    ]
+  }
+}

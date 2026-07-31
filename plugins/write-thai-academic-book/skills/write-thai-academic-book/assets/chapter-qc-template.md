@@ -17,6 +17,14 @@
 - Broad value/use potential:
 - Course alignment, when required:
 
+## Style Preservation
+
+- Style baseline: `style-profile.md` / LEGACY_FALLBACK / NOT_APPLICABLE
+- Confirmed traits preserved:
+- Style drift detected:
+- Mandatory institutional/publisher/official overrides:
+- Style preservation: PASS / REVIEW / FAIL / NOT_APPLICABLE
+
 | Criterion | Evidence | Status/score | Gap | Required revision |
 | --- | --- | --- | --- | --- |
 

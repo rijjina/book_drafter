@@ -13,6 +13,13 @@
 - Teaching minimum criterion: NOT_APPLICABLE or 1-4
 - A-equivalent evidence: COMPLETE / INCOMPLETE / NOT_APPLICABLE
 - Decision: PASS / CONDITIONAL PASS / FAIL
+- Style baseline: `source/style-profile.md` / chapter `style-profile.md` files / LEGACY_FALLBACK / NOT_APPLICABLE
+- Style preservation: PASS / REVIEW / FAIL / NOT_APPLICABLE
+
+## Style Preservation Verification
+
+| Trait | Baseline | Final evidence/location | Result | Required action |
+| --- | --- | --- | --- | --- |
 
 ## Governing Rubric
 
@@ -48,5 +55,5 @@
 - Contents and numbering:
 - Cross-references:
 - Language and terminology:
-- DOCX/PDF visual QA:
+- Final DOCX visual QA:
 - Remaining limitations:
