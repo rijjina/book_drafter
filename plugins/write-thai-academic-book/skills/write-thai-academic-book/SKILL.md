@@ -1,6 +1,6 @@
 ---
 name: write-thai-academic-book
-description: Draft, audit, revise, and quality-check Thai teaching notes, books, and textbooks at Level A/A-equivalent. Use for Markdown-first drafting, author review, gated revision, or final DOCX.
+description: Draft, revise, and produce Thai teaching notes, books, and textbooks at Level A/A-equivalent. Use for Markdown-first writing, assessment-package handoff, human-approved revision, or final DOCX.
 ---
 
 # Write Thai Academic Book
@@ -17,8 +17,9 @@ voice, and generate DOCX only through the final production gate.
 2. Read only the task-group contract linked in the table. For a gate-bearing
    production task other than `select-document-type`, also read
    [core-production-contract.md](references/core-production-contract.md).
-3. Load the quality references named by that task contract and the approved
-   document type. Do not preload the whole reference library.
+3. For author review or academic QC, require a validated package from
+   `$assess-thai-academic-manuscript`; do not repeat its judgment. For drafting
+   and revision, load only the references named by the routed contract.
 4. Inventory the project, then run `scripts/check_task_gate.py` before any write.
    Treat its `required_references`, `inputs`, `owned_outputs`, and `blockers` as
    the execution checklist.
@@ -49,7 +50,14 @@ Load a file only when the selected task or an actual finding requires it:
 - [editorial-standards.md](references/editorial-standards.md): outline, prose,
   citations, figures, tables, rights, or document structure.
 - [qc-rubric.md](references/qc-rubric.md): any formal QC, readiness decision, or
-  prioritized author review.
+  legacy compatibility only; new academic findings come from the assessment
+  package.
+- [assessment-integration.md](references/assessment-integration.md): every
+  `author-review`, `outline-qc`, `chapter-qc`, `manuscript-qc`, `final-qc`, or
+  approved revision consuming assessment IDs.
+- [evidence-matrix-integration.md](references/evidence-matrix-integration.md):
+  every `draft-chapter`; require a validated Evidence Package and a six-column
+  Matrix at `READY_TO_DRAFT`.
 - [source-map.md](references/source-map.md): authority conflicts, exact source
   pages, provenance, or a disputed rule.
 - [reference-index.md](references/reference-index.md): topic/QC routing and
@@ -72,37 +80,27 @@ refresh. Never replace verified curated Markdown with unverified extraction.
   explicit change request, or `--rebuild` authorization.
 - Never invent citations, permissions, author experience, research findings,
   course evidence, or quality evidence. Preserve missing evidence as blockers.
+- Academic assessment is owned by `$assess-thai-academic-manuscript`. The
+  compatibility QC tasks create pointer/gate records and mechanical preflight
+  only; they never recompute or silently replace assessment findings.
 - Draft and revise in Markdown. Preserve an imported
   `source/original-manuscript.docx` byte-for-byte. No draft, revision, review, or
   QC task creates a generated DOCX or PDF.
-- `PASS`, `CONDITIONAL PASS`, and `MEETS_TARGET` are machine findings, not human
-  approval. Approval for one task or chapter never approves another.
-- Token counts are diagnostic only. Optimize quality per loaded token through
-  routing, cached extraction, and incremental builds—never through lossy
-  summaries or omitted rules.
-
+- `PASS`, `CONDITIONAL PASS`, `READY_FOR_AUTHOR_REVIEW`, and `MEETS_TARGET` are
+  machine findings, not human approval. Approval for one task or chapter never
+  approves another. Apply only author-approved criterion/revision IDs.
 ## Portable Work Roles
 
 Use behavioral roles without assuming a particular model or reasoning label:
-
-- **Planner** for cross-chapter strategy, conflicting authorities, or unclear
-  ownership.
-- **Worker** for routine drafting, approved editing, packaging, and validation.
-- **Advisor** for academic-quality, integrity, rights, or material style
-  judgment; it advises and does not silently rewrite.
-- **Debugger** only after a deterministic failure; diagnose a bounded fix, then
-  return implementation to the Worker.
-
-Roles never bypass gates or expand artifact ownership. Use only the roles the
-task needs.
+**Planner** for cross-chapter ownership, **Worker** for routine production,
+**Advisor** for integrity/rights/style judgment, and **Debugger** after a
+deterministic failure. Roles never bypass gates or expand ownership.
 
 ## Host Portability
 
 - Resolve `scripts/`, `references/`, and `assets/` relative to this skill folder;
   never assume a host-specific installation path.
-- Use the host's available shell, filesystem, document, PDF, and rendering
-  capabilities. Treat bundled scripts as portable command-line helpers and run
-  `--help` before an unfamiliar invocation.
+- Resolve all bundled helpers relative to this skill.
 - Do not require named models, provider-specific reasoning labels, subagents, or
   host-only tools. Use the behavioral roles above with the capabilities present.
 - If Python or DOCX rendering is unavailable, continue planning or read-only

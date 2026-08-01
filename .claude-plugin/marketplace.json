@@ -7,8 +7,8 @@
     {
       "name": "write-thai-academic-book",
       "source": "./plugins/write-thai-academic-book",
-      "description": "Preserve authorial style while drafting and quality-checking Thai academic books and teaching documents with approval gates.",
-      "version": "1.2.0"
+      "description": "Research, assess, plan, draft, and quality-check Thai academic manuscripts with evidence and approval gates.",
+      "version": "1.3.0"
     }
   ]
 }

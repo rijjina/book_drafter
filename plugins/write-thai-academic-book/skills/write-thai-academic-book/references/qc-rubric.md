@@ -1,5 +1,11 @@
 # QC Rubric
 
+> Compatibility reference only. New academic assessment findings and readiness
+> evidence are owned by `$assess-thai-academic-manuscript`. The writing skill
+> may use the status names below to interpret legacy projects, but must consume a
+> validated assessment package for new `author-review`, outline/chapter/
+> manuscript QC, or final academic QC work.
+
 ## Status Scale
 
 - `PASS`: evidence is complete and no blocking issue remains.

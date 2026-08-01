@@ -1,8 +1,8 @@
 # Imported Manuscript Workflow
 
 Read with `core-production-contract.md` and `style-preservation.md`. Load
-`editorial-standards.md`, `qc-rubric.md`, and the quality reference for the
-approved type when performing manuscript QC or revision.
+`assessment-integration.md` for manuscript QC and approved revision. Load
+`editorial-standards.md` only for approved editing or mechanical packaging.
 
 ## `import-manuscript`
 
@@ -23,20 +23,16 @@ blocker, and do not guess. Do not run QC, revise prose, or create export files.
 ## `manuscript-qc`
 
 Require approved import. Read the style profile first, run preflight with the
-approved type, then audit the whole manuscript and every detected chapter. The
+approved type, then consume a validated `ASSESS_MANUSCRIPT` package. The
 task owns only:
 
 - `final/manuscript-preflight-report.md`;
-- `final/manuscript-qc.md` from `assets/manuscript-qc-template.md`;
-- each chapter's `chapter-qc.md` and `sources-and-rights.md`;
+- `final/manuscript-qc.md` from `assets/assessment-adapter-template.md`;
 - `final/approval.md` with task `manuscript-qc` and status `PENDING`.
 
-Do not edit the manuscript. For `book`, course evidence is not a criterion. For
-`teaching-notes`, record all eight scores, mean, minimum, blockers, and
-A-equivalent evidence. Record confirmed style traits, accidental
-inconsistencies, mandatory overrides, and style drift by chapter. For a legacy
-import without a profile, compare directly with the preserved original and
-record `LEGACY_FALLBACK`.
+Do not edit or reassess the manuscript, regenerate per-chapter QC, or create new
+rights ledgers. Preserve package status, rule limitations, counts, criterion
+IDs, and revision IDs. Mechanical preflight remains writer-owned.
 
 ## `revise-manuscript`
 
@@ -58,6 +54,6 @@ the original/profile. Do not generate DOCX/PDF or run final QC.
 
 ```powershell
 python scripts/check_task_gate.py --project-root <project> --task import-manuscript --document-type book --input <draft.docx>
-python scripts/check_task_gate.py --project-root <project> --task manuscript-qc --document-type book
+python scripts/check_task_gate.py --project-root <project> --task manuscript-qc --document-type book --assessment-package <project>/assessments/<assessment-id>
 python scripts/check_task_gate.py --project-root <project> --task revise-manuscript --document-type book
 ```

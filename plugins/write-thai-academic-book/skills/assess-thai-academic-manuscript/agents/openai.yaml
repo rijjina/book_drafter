@@ -1,0 +1,4 @@
+interface:
+  display_name: "Thai Academic Manuscript Assessment"
+  short_description: "Assess Thai academic-rank manuscripts"
+  default_prompt: "Use $assess-thai-academic-manuscript to assess my outline or manuscript against supplied references and the selected academic-rank route before revision."

@@ -4,6 +4,7 @@
 from __future__ import annotations
 
 import argparse
+import hashlib
 import json
 import re
 import sys
@@ -38,6 +39,33 @@ TASKS = (
     "produce-document",
 )
 
+ASSESSMENT_ADAPTER_TASKS = {
+    "outline-qc",
+    "chapter-qc",
+    "manuscript-qc",
+    "author-review",
+    "final-qc",
+}
+ASSESSMENT_HANDOFF_TASKS = ASSESSMENT_ADAPTER_TASKS | {
+    "revise-outline",
+    "revise-chapter",
+    "revise-manuscript",
+}
+ASSESSMENT_TASK_COMPATIBILITY = {
+    "outline-qc": {"ASSESS_OUTLINE"},
+    "chapter-qc": {"ASSESS_CHAPTER"},
+    "manuscript-qc": {"ASSESS_MANUSCRIPT"},
+    "author-review": {"ASSESS_OUTLINE", "ASSESS_CHAPTER", "ASSESS_MANUSCRIPT"},
+    "final-qc": {"ASSESS_MANUSCRIPT"},
+}
+ASSESSMENT_PACKAGE_STATUSES = {
+    "READY_FOR_AUTHOR_REVIEW",
+    "NEEDS_RULE_REFRESH",
+    "NEEDS_EVIDENCE",
+    "BLOCKED_RULE_SELECTION",
+    "BLOCKED_INPUT",
+}
+
 TASK_GROUP_REFERENCE = {
     "select-document-type": "references/workflow-project.md",
     "project-setup": "references/workflow-project.md",
@@ -58,44 +86,25 @@ TASK_GROUP_REFERENCE = {
 
 EDITORIAL_TASKS = {
     "draft-outline",
-    "outline-qc",
     "revise-outline",
     "draft-chapter",
-    "chapter-qc",
     "revise-chapter",
-    "manuscript-qc",
     "revise-manuscript",
-    "author-review",
     "final-qc",
     "produce-document",
 }
-QC_TASKS = {
-    "outline-qc",
-    "chapter-qc",
-    "revise-chapter",
-    "manuscript-qc",
-    "revise-manuscript",
-    "author-review",
-    "final-qc",
-}
 STYLE_TASKS = {
     "import-manuscript",
-    "manuscript-qc",
     "revise-manuscript",
 }
 TYPE_QUALITY_TASKS = {
     "select-document-type",
     "project-setup",
     "draft-outline",
-    "outline-qc",
     "revise-outline",
     "draft-chapter",
-    "chapter-qc",
     "revise-chapter",
-    "manuscript-qc",
     "revise-manuscript",
-    "author-review",
-    "final-qc",
 }
 
 
@@ -106,6 +115,24 @@ def parse_args() -> argparse.Namespace:
     parser.add_argument("--document-type", choices=DOCUMENT_TYPES)
     parser.add_argument("--input", type=Path, dest="input_path")
     parser.add_argument("--output", type=Path, dest="output_path")
+    parser.add_argument(
+        "--assessment-package",
+        type=Path,
+        dest="assessment_package",
+        help="Validated assess-thai-academic-manuscript package directory",
+    )
+    parser.add_argument(
+        "--outline-matrix",
+        type=Path,
+        dest="outline_matrix",
+        help="Validated six-column Outline Matrix for draft-chapter",
+    )
+    parser.add_argument(
+        "--evidence-package",
+        type=Path,
+        dest="evidence_package",
+        help="Validated research-outline-evidence package for draft-chapter",
+    )
     parser.add_argument("--chapter", type=int)
     parser.add_argument("--chapter-count", type=int)
     parser.add_argument("--rebuild", action="store_true")
@@ -125,6 +152,300 @@ def read_fields(path: Path) -> dict[str, str]:
         key, value = line.split(":", 1)
         fields[key.strip().lower()] = value.strip()
     return fields
+
+
+def read_yaml_metadata(path: Path) -> dict[str, str]:
+    """Read the first simple fenced YAML block used by assessment artifacts."""
+    if not path.is_file():
+        return {}
+    text = path.read_text(encoding="utf-8-sig", errors="replace")
+    match = re.search(r"```yaml\s*\r?\n(.*?)\r?\n```", text, re.S | re.I)
+    if not match:
+        return {}
+    fields: dict[str, str] = {}
+    for raw_line in match.group(1).splitlines():
+        item = re.fullmatch(r"\s*([A-Za-z_][A-Za-z0-9_-]*)\s*:\s*(.*?)\s*", raw_line)
+        if not item:
+            continue
+        key, value = item.groups()
+        if len(value) >= 2 and value[0] == value[-1] and value[0] in {'"', "'"}:
+            value = value[1:-1]
+        fields[key] = value
+    return fields
+
+
+def read_all_yaml_metadata(path: Path) -> dict[str, str]:
+    """Merge simple fenced YAML blocks in document order."""
+    if not path.is_file():
+        return {}
+    text = path.read_text(encoding="utf-8-sig", errors="replace")
+    fields: dict[str, str] = {}
+    for body in re.findall(r"```yaml\s*\r?\n(.*?)\r?\n```", text, re.S | re.I):
+        for raw_line in body.splitlines():
+            item = re.fullmatch(r"\s*([A-Za-z_][A-Za-z0-9_-]*)\s*:\s*(.*?)\s*", raw_line)
+            if not item:
+                continue
+            key, value = item.groups()
+            if len(value) >= 2 and value[0] == value[-1] and value[0] in {'"', "'"}:
+                value = value[1:-1]
+            fields[key] = value
+    return fields
+
+
+def recorded_path_matches(recorded: str, actual: Path, artifact: Path, root: Path) -> bool:
+    if not recorded:
+        return False
+    value = Path(recorded)
+    if value.is_absolute():
+        return value.resolve() == actual.resolve()
+    bases = [root, Path.cwd(), artifact.parent, *artifact.parents]
+    return any((base / value).resolve() == actual.resolve() for base in bases)
+
+
+def split_markdown_row(line: str) -> list[str]:
+    return [cell.strip() for cell in re.split(r"(?<!\\)\|", line.strip().strip("|"))]
+
+
+def markdown_table_rows(text: str, expected: list[str]) -> list[dict[str, str]] | None:
+    lines = text.splitlines()
+    for index in range(len(lines) - 1):
+        if not lines[index].lstrip().startswith("|"):
+            continue
+        headers = split_markdown_row(lines[index])
+        if headers != expected or not lines[index + 1].lstrip().startswith("|"):
+            continue
+        divider = split_markdown_row(lines[index + 1])
+        if len(divider) != len(headers) or not all(
+            re.fullmatch(r":?-{3,}:?", cell.replace(" ", "")) for cell in divider
+        ):
+            continue
+        rows: list[dict[str, str]] = []
+        cursor = index + 2
+        while cursor < len(lines) and lines[cursor].lstrip().startswith("|"):
+            cells = split_markdown_row(lines[cursor])
+            if len(cells) == len(headers):
+                rows.append(dict(zip(headers, cells)))
+            cursor += 1
+        return rows
+    return None
+
+
+def claim_fingerprint(claim: str) -> str:
+    normalized = re.sub(r"\s+", " ", claim.strip()).lower()
+    return "sha256:" + hashlib.sha256(normalized.encode("utf-8")).hexdigest()[:12]
+
+
+def require_evidence_matrix_handoff(
+    blockers: list[str],
+    checked: list[str],
+    root: Path,
+    matrix: Path | None,
+    evidence: Path | None,
+) -> None:
+    """Enforce the research -> Matrix -> draft ownership boundary."""
+    if matrix is None:
+        blockers.append("--outline-matrix is required for draft-chapter.")
+    if evidence is None:
+        blockers.append("--evidence-package is required for draft-chapter.")
+    if matrix is None or evidence is None:
+        return
+    matrix = matrix.resolve()
+    evidence = evidence.resolve()
+    outline = (root / "project" / "outline.md").resolve()
+    if not matrix.is_file():
+        blockers.append(f"Outline Matrix does not exist: {matrix}")
+        return
+    if not evidence.is_file():
+        blockers.append(f"Evidence Package does not exist: {evidence}")
+        return
+    if not matrix.is_relative_to(root.resolve()):
+        blockers.append(f"Outline Matrix must be inside the project root: {matrix}")
+    research_root = (root / "research").resolve()
+    if not evidence.is_relative_to(research_root):
+        blockers.append(f"Evidence Package must be inside {research_root}: {evidence}")
+
+    matrix_text = matrix.read_text(encoding="utf-8-sig", errors="replace")
+    matrix_first = read_yaml_metadata(matrix)
+    matrix_all = read_all_yaml_metadata(matrix)
+    if matrix_first.get("status") != "READY_TO_DRAFT":
+        blockers.append("Outline Matrix metadata status must be READY_TO_DRAFT.")
+    if matrix_all.get("validator_status") != "READY_TO_DRAFT":
+        blockers.append("Outline Matrix validator_status must be READY_TO_DRAFT.")
+    expected_header = (
+        "| ลำดับ | หัวข้อ | ผู้อ่านต้องทำได้ | Claim | หลักฐาน | ตัวอย่าง/กิจกรรม |"
+    )
+    if expected_header not in matrix_text:
+        blockers.append("Outline Matrix must preserve the exact six semantic columns.")
+    if "[ต้องค้นหลักฐาน:" in matrix_text:
+        blockers.append("Outline Matrix contains unresolved evidence gaps.")
+    matrix_headers = ["ลำดับ", "หัวข้อ", "ผู้อ่านต้องทำได้", "Claim", "หลักฐาน", "ตัวอย่าง/กิจกรรม"]
+    matrix_rows = markdown_table_rows(matrix_text, matrix_headers)
+    if matrix_rows is None or not matrix_rows:
+        blockers.append("Outline Matrix must contain at least one valid six-column row.")
+        matrix_rows = []
+
+    evidence_first = read_yaml_metadata(evidence)
+    evidence_all = read_all_yaml_metadata(evidence)
+    mode = evidence_first.get("mode", "")
+    expected_status = "READY_FOR_MATRIX" if mode == "SCOPING" else "READY_FOR_HANDOFF"
+    if mode not in {"SCOPING", "GAP_FILL"}:
+        blockers.append(f"Unsupported Evidence Package mode for drafting: {mode or '<missing>'}")
+    if evidence_first.get("status") != expected_status:
+        blockers.append(f"Evidence Package status must be {expected_status} for {mode or 'its mode'}.")
+    if evidence_all.get("validator_status") != expected_status:
+        blockers.append(f"Evidence validator_status must be {expected_status}.")
+    if not recorded_path_matches(
+        evidence_first.get("source_outline", ""), outline, evidence, root
+    ):
+        blockers.append("Evidence source_outline does not match the current project outline.")
+    if mode == "GAP_FILL" and not recorded_path_matches(
+        evidence_first.get("source_matrix", ""), matrix, evidence, root
+    ):
+        blockers.append("GAP_FILL source_matrix does not match --outline-matrix.")
+    if mode == "GAP_FILL":
+        claim_headers = [
+            "Claim ID",
+            "Outline anchor",
+            "Matrix anchor",
+            "Claim",
+            "Fingerprint",
+            "Evidence",
+            "Relation",
+            "Synthesis/limits",
+            "Sufficiency",
+            "Gap/action",
+        ]
+        claim_rows = markdown_table_rows(
+            evidence.read_text(encoding="utf-8-sig", errors="replace"), claim_headers
+        )
+        if claim_rows is None:
+            blockers.append("GAP_FILL package is missing the claim-evidence map.")
+        else:
+            mapped = {row.get("Matrix anchor", ""): row.get("Fingerprint", "") for row in claim_rows}
+            for index, row in enumerate(matrix_rows, 1):
+                anchor = f"OM-R{index:02d}"
+                expected = claim_fingerprint(row.get("Claim", ""))
+                if anchor not in mapped:
+                    blockers.append(f"GAP_FILL package is missing Matrix row {anchor}.")
+                elif mapped[anchor] != expected:
+                    blockers.append(f"GAP_FILL claim fingerprint is stale for {anchor}.")
+    if mode == "SCOPING":
+        basis = matrix_first.get("source_basis", "")
+        package_id = evidence_first.get("package_id", "")
+        if package_id not in basis and str(evidence) not in basis:
+            blockers.append("Matrix source_basis must identify the SCOPING Evidence Package.")
+
+    checked.append(f"draft-ready Outline Matrix contract: {matrix}")
+    checked.append(f"verified Evidence Package contract: {evidence}")
+    checked.append(
+        "run research and Matrix validators plus orchestrate-thai-academic-writing/"
+        "scripts/validate_workflow_handoff.py --stage draft-chapter before drafting"
+    )
+
+
+def input_sha256(path: Path) -> str:
+    digest = hashlib.sha256()
+    if path.is_file():
+        with path.open("rb") as handle:
+            for chunk in iter(lambda: handle.read(1024 * 1024), b""):
+                digest.update(chunk)
+        return digest.hexdigest()
+    ignored_dirs = {"assessments", "rendered", "__pycache__", ".pytest_cache"}
+    files = sorted(
+        item
+        for item in path.rglob("*")
+        if item.is_file() and not any(part in ignored_dirs for part in item.relative_to(path).parts)
+    )
+    for item in files:
+        relative = item.relative_to(path).as_posix().encode("utf-8")
+        digest.update(len(relative).to_bytes(4, "big"))
+        digest.update(relative)
+        digest.update(item.stat().st_size.to_bytes(8, "big"))
+        with item.open("rb") as handle:
+            for chunk in iter(lambda: handle.read(1024 * 1024), b""):
+                digest.update(chunk)
+    return digest.hexdigest()
+
+
+def require_assessment_package(
+    blockers: list[str],
+    checked: list[str],
+    root: Path,
+    task: str,
+    package: Path | None,
+    expected_input: Path | None = None,
+) -> None:
+    """Check the cross-skill package contract without redoing academic judgment."""
+    if package is None:
+        blockers.append(f"--assessment-package is required for {task}.")
+        return
+    package = package.resolve()
+    assessments_root = (root / "assessments").resolve()
+    if not package.is_dir():
+        blockers.append(f"Assessment package directory does not exist: {package}")
+        return
+    if not package.is_relative_to(assessments_root):
+        blockers.append(f"Assessment package must be inside {assessments_root}: {package}")
+    paths = {
+        name: package / name
+        for name in ("rule-register.md", "assessment-report.md", "author-revision-plan.md")
+    }
+    for name, path in paths.items():
+        add_missing(blockers, path, f"assessment package artifact {name}")
+    if any(not path.is_file() for path in paths.values()):
+        return
+
+    rule = read_yaml_metadata(paths["rule-register.md"])
+    report = read_yaml_metadata(paths["assessment-report.md"])
+    plan = read_yaml_metadata(paths["author-revision-plan.md"])
+    for key in ("package_id", "assessment_id", "input_path", "input_sha256"):
+        values = {rule.get(key, ""), report.get(key, ""), plan.get(key, "")}
+        if "" in values or len(values) != 1:
+            blockers.append(f"Assessment package artifacts disagree on metadata '{key}'.")
+    for key in ("task", "mode", "rules_status", "package_status"):
+        if not rule.get(key) or rule.get(key) != report.get(key):
+            blockers.append(f"Assessment rule/report metadata disagree on '{key}'.")
+
+    assessment_task = rule.get("task", "")
+    if assessment_task not in ASSESSMENT_TASK_COMPATIBILITY.get(task, set()):
+        allowed = ", ".join(sorted(ASSESSMENT_TASK_COMPATIBILITY.get(task, set())))
+        blockers.append(
+            f"Assessment task {assessment_task or '<missing>'} is incompatible with {task}; expected {allowed}."
+        )
+    package_status = rule.get("package_status", "")
+    if package_status not in ASSESSMENT_PACKAGE_STATUSES:
+        blockers.append(f"Unknown assessment package status: {package_status or '<missing>'}")
+    elif package_status == "BLOCKED_INPUT":
+        blockers.append("Assessment package is BLOCKED_INPUT and cannot be handed to the writer.")
+    if plan.get("approval_status") != "PENDING_AUTHOR_APPROVAL":
+        blockers.append("Assessment package must remain PENDING_AUTHOR_APPROVAL before writer handoff.")
+
+    digest = rule.get("input_sha256", "").lower()
+    if not re.fullmatch(r"[0-9a-f]{64}", digest):
+        blockers.append("Assessment package input_sha256 is missing or malformed.")
+    recorded_input = Path(rule.get("input_path", ""))
+    if recorded_input and not recorded_input.is_absolute():
+        recorded_input = (root / recorded_input).resolve()
+    elif recorded_input:
+        recorded_input = recorded_input.resolve()
+    if expected_input is not None:
+        expected_input = expected_input.resolve()
+        if recorded_input and recorded_input != expected_input:
+            blockers.append(
+                f"Assessment input does not match task input: {recorded_input} != {expected_input}"
+            )
+        recorded_input = expected_input
+    if not recorded_input or not recorded_input.exists() or not (
+        recorded_input.is_file() or recorded_input.is_dir()
+    ):
+        blockers.append(f"Assessment source input does not exist: {recorded_input}")
+    elif digest and input_sha256(recorded_input) != digest:
+        blockers.append("Assessment package input fingerprint is stale; reassess before handoff.")
+
+    checked.append(f"assessment package contract: {package}")
+    checked.append(
+        "run assess-thai-academic-manuscript/scripts/validate_assessment_package.py before writing the adapter record"
+    )
 
 
 def clean_choice(value: str) -> str:
@@ -401,8 +722,10 @@ def task_reference_route(
         required.append(type_reference)
     if task in EDITORIAL_TASKS:
         required.append("references/editorial-standards.md")
-    if task in QC_TASKS:
-        required.append("references/qc-rubric.md")
+    if task in ASSESSMENT_HANDOFF_TASKS:
+        required.append("references/assessment-integration.md")
+    if task == "draft-chapter":
+        required.append("references/evidence-matrix-integration.md")
 
     style_relevant = task in STYLE_TASKS or (
         task == "draft-chapter" and input_path is not None
@@ -444,6 +767,9 @@ def task_artifact_contract(
     chapter: int | None,
     input_path: Path | None,
     output_path: Path | None,
+    assessment_package: Path | None,
+    outline_matrix: Path | None,
+    evidence_package: Path | None,
 ) -> tuple[list[str], list[str]]:
     """Describe task inputs and owned outputs without mutating the project."""
     project = root / "project"
@@ -455,13 +781,13 @@ def task_artifact_contract(
         "project-setup": [project / "manuscript-profile.md", project / "type-approval.md"],
         "refresh-sources": [project / "governing-standard.md", project / "type-approval.md"],
         "draft-outline": [project / "project-brief.md", project / "governing-standard.md", approval],
-        "outline-qc": [project / "outline.md", project / "governing-standard.md", approval],
+        "outline-qc": [project / "outline.md", project / "governing-standard.md", approval, assessment_package],
         "revise-outline": [project / "outline.md", project / "outline-qc.md", approval],
         "import-manuscript": [project / "type-approval.md"] + ([input_path] if input_path else []),
-        "manuscript-qc": [source / "original-manuscript.docx", source / "import-report.md", source / "approval.md"],
+        "manuscript-qc": [source / "original-manuscript.docx", source / "import-report.md", source / "approval.md", assessment_package],
         "revise-manuscript": [source / "original-manuscript.docx", final / "manuscript-qc.md", final / "approval.md"],
-        "author-review": [project / "type-approval.md"] + ([input_path] if input_path else []),
-        "final-qc": [project / "manuscript-profile.md"],
+        "author-review": [project / "type-approval.md", assessment_package] + ([input_path] if input_path else []),
+        "final-qc": [project / "manuscript-profile.md", assessment_package],
         "produce-document": [final / "preflight-report.md", final / "final-qc.md", final / "approval.md"],
     }
     outputs: dict[str, list[Path]] = {
@@ -472,7 +798,7 @@ def task_artifact_contract(
         "outline-qc": [project / "outline-qc.md", approval],
         "revise-outline": [project / "outline.md", approval],
         "import-manuscript": [source / "original-manuscript.docx", source / "import-report.md", source / "style-profile.md", source / "approval.md"],
-        "manuscript-qc": [final / "manuscript-preflight-report.md", final / "manuscript-qc.md", root / "chapters" / "chapter-*" / "chapter-qc.md", root / "chapters" / "chapter-*" / "sources-and-rights.md", final / "approval.md"],
+        "manuscript-qc": [final / "manuscript-preflight-report.md", final / "manuscript-qc.md", final / "approval.md"],
         "revise-manuscript": [root / "chapters" / "chapter-*" / "revised.md", root / "chapters" / "chapter-*" / "revision.md", final / "revision-log.md", final / "approval.md"],
         "author-review": [output_path] if output_path else [],
         "final-qc": [final / "preflight-report.md", final / "final-qc.md", final / "approval.md"],
@@ -485,12 +811,13 @@ def task_artifact_contract(
         folder = chapter_dir(root, chapter)
         inputs[task] = [project / "outline.md", project / "approval.md"]
         if task == "chapter-qc":
-            inputs[task] += [folder / "draft.md", folder / "sources-and-rights.md", folder / "approval.md"]
+            inputs[task] += [folder / "draft.md", folder / "sources-and-rights.md", folder / "approval.md", assessment_package]
             outputs[task] = [folder / "chapter-qc.md", folder / "approval.md"]
         elif task == "revise-chapter":
             inputs[task] += [folder / "draft.md", folder / "chapter-qc.md", folder / "sources-and-rights.md", folder / "approval.md"]
             outputs[task] = [folder / "revised.md", folder / "revision.md", folder / "sources-and-rights.md", folder / "approval.md"]
         else:
+            inputs[task] += [outline_matrix, evidence_package]
             if input_path is not None:
                 inputs[task].append(input_path)
                 outputs[task] = [
@@ -611,6 +938,14 @@ def check_gate(args: argparse.Namespace) -> dict[str, object]:
         require_approval(
             blockers, project / "approval.md", ("draft-outline", "revise-outline"), "APPROVED"
         )
+        require_assessment_package(
+            blockers,
+            checked,
+            root,
+            args.task,
+            args.assessment_package,
+            project / "outline.md",
+        )
         prevent_overwrite(blockers, (project / "outline-qc.md",), args.rebuild)
 
     elif args.task == "revise-outline":
@@ -620,6 +955,13 @@ def check_gate(args: argparse.Namespace) -> dict[str, object]:
 
     elif args.task == "draft-chapter" and args.chapter is not None:
         require_outline_gate(blockers, root)
+        require_evidence_matrix_handoff(
+            blockers,
+            checked,
+            root,
+            args.outline_matrix,
+            args.evidence_package,
+        )
         if args.chapter > 1:
             previous = args.chapter - 1
             require_approval(
@@ -666,6 +1008,14 @@ def check_gate(args: argparse.Namespace) -> dict[str, object]:
             blockers, folder / "approval.md", ("draft-chapter",), "APPROVED", args.chapter
         )
         require_chapter_style_profile(blockers, checked, folder)
+        require_assessment_package(
+            blockers,
+            checked,
+            root,
+            args.task,
+            args.assessment_package,
+            folder / "draft.md",
+        )
         prevent_overwrite(blockers, (folder / "chapter-qc.md",), args.rebuild)
 
     elif args.task == "revise-chapter" and args.chapter is not None:
@@ -703,6 +1053,14 @@ def check_gate(args: argparse.Namespace) -> dict[str, object]:
         add_missing(blockers, source / "import-report.md", "import report")
         require_approval(blockers, source / "approval.md", ("import-manuscript",), "APPROVED")
         require_import_style_profile(blockers, checked, source)
+        require_assessment_package(
+            blockers,
+            checked,
+            root,
+            args.task,
+            args.assessment_package,
+            source / "original-manuscript.docx",
+        )
         prevent_overwrite(
             blockers,
             (final / "manuscript-preflight-report.md", final / "manuscript-qc.md"),
@@ -734,9 +1092,17 @@ def check_gate(args: argparse.Namespace) -> dict[str, object]:
                 blockers.append(f"Unsupported author-review format: {review_input}")
             else:
                 checked.append("author manuscript is read-only")
+                require_assessment_package(
+                    blockers,
+                    checked,
+                    root,
+                    args.task,
+                    args.assessment_package,
+                    review_input,
+                )
                 if args.output_path is None:
                     checked.append(
-                        "response-only author review; no report or approval artifact will be written"
+                        "response-only assessment handoff; no legacy pointer or approval artifact will be written"
                     )
                 else:
                     review_output = args.output_path.resolve()
@@ -749,7 +1115,7 @@ def check_gate(args: argparse.Namespace) -> dict[str, object]:
                         )
                     prevent_overwrite(blockers, (review_output,), args.rebuild)
                     checked.append(
-                        "approval-free review report; may be written without creating or changing approval artifacts"
+                        "approval-free assessment pointer; may be written without creating or changing approval artifacts"
                     )
 
     elif args.task == "final-qc":
@@ -776,6 +1142,14 @@ def check_gate(args: argparse.Namespace) -> dict[str, object]:
         else:
             require_outline_gate(blockers, root)
             require_completed_chapters(blockers, root, args.chapter_count)
+        require_assessment_package(
+            blockers,
+            checked,
+            root,
+            args.task,
+            args.assessment_package,
+            None,
+        )
         prevent_overwrite(
             blockers, (final / "preflight-report.md", final / "final-qc.md"), args.rebuild
         )
@@ -806,7 +1180,14 @@ def check_gate(args: argparse.Namespace) -> dict[str, object]:
         args.input_path,
     )
     inputs, owned_outputs = task_artifact_contract(
-        args.task, root, args.chapter, args.input_path, args.output_path
+        args.task,
+        root,
+        args.chapter,
+        args.input_path,
+        args.output_path,
+        args.assessment_package,
+        args.outline_matrix,
+        args.evidence_package,
     )
 
     return {
@@ -814,6 +1195,9 @@ def check_gate(args: argparse.Namespace) -> dict[str, object]:
         "task": args.task,
         "document_type": args.document_type,
         "chapter": args.chapter,
+        "assessment_package": str(args.assessment_package.resolve()) if args.assessment_package else None,
+        "outline_matrix": str(args.outline_matrix.resolve()) if args.outline_matrix else None,
+        "evidence_package": str(args.evidence_package.resolve()) if args.evidence_package else None,
         "project_root": str(root),
         "required_references": required_references,
         "conditional_references": conditional_references,
@@ -825,6 +1209,8 @@ def check_gate(args: argparse.Namespace) -> dict[str, object]:
 
 
 def main() -> int:
+    if hasattr(sys.stdout, "reconfigure"):
+        sys.stdout.reconfigure(encoding="utf-8")
     args = parse_args()
     result = check_gate(args)
     print(json.dumps(result, ensure_ascii=False, indent=2))

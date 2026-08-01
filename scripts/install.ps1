@@ -7,9 +7,13 @@ param(
 
 $repoRoot = Split-Path -Parent $PSScriptRoot
 $pluginSource = Join-Path $repoRoot "plugins\write-thai-academic-book"
-$skillSource = Join-Path $pluginSource "skills\write-thai-academic-book"
+$skillNames = @(
+    "write-thai-academic-book",
+    "research-outline-evidence",
+    "assess-thai-academic-manuscript",
+    "orchestrate-thai-academic-writing"
+)
 $pluginTargets = @("antigravity-plugin", "antigravity-cli")
-$source = if ($pluginTargets -contains $Target) { $pluginSource } else { $skillSource }
 
 $base = if ($DestinationRoot) {
     $DestinationRoot
@@ -23,11 +27,23 @@ $base = if ($DestinationRoot) {
     }
 }
 
-$destination = Join-Path $base "write-thai-academic-book"
 New-Item -ItemType Directory -Force -Path $base | Out-Null
-if (Test-Path -LiteralPath $destination) {
-    Remove-Item -LiteralPath $destination -Recurse -Force
+if ($pluginTargets -contains $Target) {
+    $destination = Join-Path $base "write-thai-academic-book"
+    if (Test-Path -LiteralPath $destination) {
+        Remove-Item -LiteralPath $destination -Recurse -Force
+    }
+    Copy-Item -LiteralPath $pluginSource -Destination $destination -Recurse
+    Write-Output "Installed Thai academic writing suite plugin for $Target at $destination"
+    exit 0
 }
-Copy-Item -LiteralPath $source -Destination $destination -Recurse
-$kind = if ($pluginTargets -contains $Target) { "plugin" } else { "skill" }
-Write-Output "Installed write-thai-academic-book $kind for $Target at $destination"
+
+foreach ($skillName in $skillNames) {
+    $source = Join-Path (Join-Path $pluginSource "skills") $skillName
+    $destination = Join-Path $base $skillName
+    if (Test-Path -LiteralPath $destination) {
+        Remove-Item -LiteralPath $destination -Recurse -Force
+    }
+    Copy-Item -LiteralPath $source -Destination $destination -Recurse
+    Write-Output "Installed $skillName skill for $Target at $destination"
+}

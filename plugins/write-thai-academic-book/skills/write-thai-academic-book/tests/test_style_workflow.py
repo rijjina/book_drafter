@@ -91,6 +91,54 @@ def write_project_profile(root: Path) -> None:
     )
 
 
+def write_assessment_package(root: Path, input_path: Path, assessment_task: str) -> Path:
+    package = root / "assessments" / f"{assessment_task.lower().replace('_', '-')}-test"
+    package.mkdir(parents=True, exist_ok=True)
+    digest = hashlib.sha256(input_path.read_bytes()).hexdigest()
+    common = f'''schema_version: "1.0"
+package_id: "adapter-test"
+assessment_id: "adapter-test"
+input_path: "{input_path.resolve()}"
+input_sha256: "{digest}"'''
+    (package / "rule-register.md").write_text(
+        f'''# Rule Register
+
+```yaml
+{common}
+task: "{assessment_task}"
+mode: "REFERENCE_ONLY"
+rules_status: "REFERENCE_ONLY"
+package_status: "NEEDS_RULE_REFRESH"
+```
+''',
+        encoding="utf-8",
+    )
+    (package / "assessment-report.md").write_text(
+        f'''# Assessment Report
+
+```yaml
+{common}
+task: "{assessment_task}"
+mode: "REFERENCE_ONLY"
+rules_status: "REFERENCE_ONLY"
+package_status: "NEEDS_RULE_REFRESH"
+```
+''',
+        encoding="utf-8",
+    )
+    (package / "author-revision-plan.md").write_text(
+        f'''# Author Revision Plan
+
+```yaml
+{common}
+approval_status: "PENDING_AUTHOR_APPROVAL"
+```
+''',
+        encoding="utf-8",
+    )
+    return package
+
+
 class StyleExtractorTests(unittest.TestCase):
     def test_deterministic_for_docx_markdown_and_text(self) -> None:
         with tempfile.TemporaryDirectory() as temp_dir:
@@ -182,6 +230,7 @@ class ImportAndGateTests(unittest.TestCase):
                 encoding="utf-8",
             )
 
+            assessment = write_assessment_package(root, review_input, "ASSESS_CHAPTER")
             before = {
                 path.relative_to(root).as_posix(): hashlib.sha256(path.read_bytes()).hexdigest()
                 for path in root.rglob("*")
@@ -201,6 +250,8 @@ class ImportAndGateTests(unittest.TestCase):
                     "book",
                     "--input",
                     str(review_input),
+                    "--assessment-package",
+                    str(assessment),
                 ],
                 capture_output=True,
                 text=True,
@@ -210,7 +261,7 @@ class ImportAndGateTests(unittest.TestCase):
             payload = json.loads(result.stdout)
             self.assertTrue(payload["allowed"])
             self.assertTrue(any("author manuscript is read-only" in item for item in payload["checked"]))
-            self.assertTrue(any("response-only author review" in item for item in payload["checked"]))
+            self.assertTrue(any("response-only assessment handoff" in item for item in payload["checked"]))
             after = {
                 path.relative_to(root).as_posix(): hashlib.sha256(path.read_bytes()).hexdigest()
                 for path in root.rglob("*")
@@ -233,6 +284,8 @@ class ImportAndGateTests(unittest.TestCase):
                     "book",
                     "--input",
                     str(review_input),
+                    "--assessment-package",
+                    str(assessment),
                     "--output",
                     str(report),
                 ],
@@ -244,7 +297,7 @@ class ImportAndGateTests(unittest.TestCase):
             file_payload = json.loads(file_result.stdout)
             self.assertTrue(file_payload["allowed"])
             self.assertTrue(
-                any("approval-free review report" in item for item in file_payload["checked"])
+                any("approval-free assessment pointer" in item for item in file_payload["checked"])
             )
             self.assertFalse(report.exists())
 
@@ -261,6 +314,8 @@ class ImportAndGateTests(unittest.TestCase):
                     "book",
                     "--input",
                     str(review_input),
+                    "--assessment-package",
+                    str(assessment),
                     "--output",
                     str(outside_report),
                 ],
@@ -339,6 +394,9 @@ class ImportAndGateTests(unittest.TestCase):
             (source / "import-report.md").write_text(
                 "# Manuscript Import Report\n\n- Import status: READY_FOR_REVIEW\n", encoding="utf-8"
             )
+            assessment = write_assessment_package(
+                root, source / "original-manuscript.docx", "ASSESS_MANUSCRIPT"
+            )
 
             legacy = subprocess.run(
                 [
@@ -350,6 +408,8 @@ class ImportAndGateTests(unittest.TestCase):
                     "manuscript-qc",
                     "--document-type",
                     "book",
+                    "--assessment-package",
+                    str(assessment),
                 ],
                 capture_output=True,
                 text=True,
@@ -373,6 +433,8 @@ class ImportAndGateTests(unittest.TestCase):
                     "manuscript-qc",
                     "--document-type",
                     "book",
+                    "--assessment-package",
+                    str(assessment),
                 ],
                 capture_output=True,
                 text=True,
@@ -396,6 +458,7 @@ class ImportAndGateTests(unittest.TestCase):
             (chapter / "approval.md").write_text(
                 "- Task: draft-chapter 01\n- Status: APPROVED\n", encoding="utf-8"
             )
+            assessment = write_assessment_package(root, chapter / "draft.md", "ASSESS_CHAPTER")
 
             command = [
                 sys.executable,
@@ -408,6 +471,8 @@ class ImportAndGateTests(unittest.TestCase):
                 "1",
                 "--document-type",
                 "book",
+                "--assessment-package",
+                str(assessment),
             ]
             legacy = subprocess.run(command, capture_output=True, text=True, check=False)
             self.assertEqual(legacy.returncode, 0, legacy.stdout + legacy.stderr)

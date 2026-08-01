@@ -55,16 +55,11 @@ standard. Do not run outline QC.
 ## `outline-qc`
 
 Require approved outline draft/revision. Create only
-`project/outline-qc.md` from `assets/outline-qc-template.md` and pending project
-approval. Do not edit the outline. Check:
-
-- type-specific scope and prohibited evidence;
-- coverage, order, duplication, and gaps;
-- planned currency, depth, synthesis, contribution, and rights evidence;
-- feasibility of the fixed Level A/A-equivalent target;
-- course alignment only when applicable.
-
-Use `qc-rubric.md` for blocker and decision semantics.
+`project/outline-qc.md` from `assets/assessment-adapter-template.md` and pending
+project approval. Do not edit or reassess the outline. Require a validated
+`ASSESS_OUTLINE` package through `--assessment-package` and preserve its input
+hash, package/rule status, criterion IDs, and revision IDs. Load
+`assessment-integration.md`; do not load `qc-rubric.md` to recompute findings.
 
 ## `revise-outline`
 
@@ -78,5 +73,5 @@ project approval to `PENDING`. Do not rerun QC or begin chapter drafting.
 python scripts/check_task_gate.py --project-root <project> --task select-document-type --document-type book
 python scripts/check_task_gate.py --project-root <project> --task project-setup --document-type book
 python scripts/check_task_gate.py --project-root <project> --task draft-outline --document-type textbook
-python scripts/check_task_gate.py --project-root <project> --task outline-qc --document-type teaching-notes
+python scripts/check_task_gate.py --project-root <project> --task outline-qc --document-type teaching-notes --assessment-package <project>/assessments/<assessment-id>
 ```

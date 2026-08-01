@@ -1,5 +1,5 @@
 {
   "$schema": "https://antigravity.google/schemas/v1/plugin.json",
   "name": "write-thai-academic-book",
-  "description": "Portable Thai academic manuscript workflow with approval gates, source-grounded QC, and final DOCX production."
+  "description": "Portable Thai academic workflow suite for evidence research, assessment, outline planning, gated drafting, and final DOCX production."
 }

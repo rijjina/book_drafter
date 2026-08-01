@@ -1,15 +1,25 @@
-# Write Thai Academic Book
+# Thai Academic Writing Suite
 
-Cross-platform Agent Skill สำหรับวางแผน ร่าง ตรวจ แก้ไข และผลิตต้นฉบับ
-งานวิชาการภาษาไทย โดยรองรับ:
+ชุด Cross-platform Agent Skills สำหรับค้นหลักฐาน วางแผน ประเมิน ร่าง แก้ไข
+และผลิตต้นฉบับงานวิชาการภาษาไทย โดยรองรับ:
 
 - `teaching-notes` — เอกสารคำสอน เป้าหมายภายใน A-equivalent
 - `book` — หนังสือ เป้าหมายระดับ A
 - `textbook` — ตำรา เป้าหมายระดับ A
 
-รุ่น `1.2.0` ใช้ Skill เนื้อหาชุดเดียวร่วมกันบน Codex, Claude Cowork,
+รุ่น `1.3.0` ใช้ Skill 4 ตัวร่วมกันบน Codex, Claude Cowork,
 Claude Code และ Google Antigravity โดยมี manifest และตัวติดตั้งบาง ๆ สำหรับ
 แต่ละ host ไม่แยกสำเนา workflow จึงลดปัญหาเนื้อหาและ gate ไม่ตรงกัน
+
+| Skill | หน้าที่ |
+| --- | --- |
+| `orchestrate-thai-academic-writing` | กำกับ flow และตรวจ handoff ระหว่างสกิล |
+| `write-thai-academic-book` | ตั้งโครงการ ร่าง/แก้ต้นฉบับ และผลิต DOCX ตาม approval gate |
+| `research-outline-evidence` | ค้นหลักฐานแบบ local-first และสร้าง claim–evidence handoff |
+| `assess-thai-academic-manuscript` | ประเมิน outline รายบท ทั้งเล่ม และ route readiness โดยไม่แก้ต้นฉบับ |
+
+`build-outline-matrix` และ `thai-academic-teaching-material` เป็น companion skills
+ที่ติดตั้งแยกต่างหากและถูกเรียกผ่าน artifact contract ของ orchestrator
 
 [คู่มือภาษาไทยฉบับละเอียด](README-Lium-notebook.md)
 
@@ -36,7 +46,20 @@ Claude Code และ Google Antigravity โดยมี manifest และต�
 - [Google Antigravity: Skills](https://antigravity.google/docs/skills)
 - [Google Antigravity: Plugins](https://antigravity.google/docs/plugins)
 
-## สิ่งที่ Skill ทำ
+## Workflow หลัก
+
+```text
+Project brief → Outline → Assessment → Research SCOPING
+→ Six-column Outline Matrix → Research GAP_FILL (ถ้าจำเป็น)
+→ READY_TO_DRAFT → Draft chapter → Assessment → Author approval
+→ Approved revision → Manuscript assessment → Final QC → DOCX
+```
+
+กฎสำคัญ: research ไม่แก้ Matrix, assessment ไม่แก้ต้นฉบับ,
+writer แก้เฉพาะ `RV-xxx` ที่ผู้เขียนอนุมัติ และเริ่มร่างได้เมื่อ Matrix เป็น
+`READY_TO_DRAFT` พร้อม Evidence Package ที่ fingerprint ตรงกันเท่านั้น
+
+## สิ่งที่ชุด Skill ทำ
 
 - บังคับเลือกประเภทผลงานและเป้าหมายคุณภาพก่อนเริ่ม production
 - ทำงานครั้งละหนึ่ง gate-bearing task
@@ -53,26 +76,24 @@ Claude Code และ Google Antigravity โดยมี manifest และต�
 book_drafter/
 ├── .agents/plugins/marketplace.json       # Codex repo marketplace
 ├── .claude-plugin/marketplace.json        # Claude/Cowork marketplace
-├── packages/write-thai-academic-book.zip  # Direct Skill upload
+├── packages/                              # Direct Skill ZIPs (4 files)
 ├── plugins/write-thai-academic-book/
 │   ├── .codex-plugin/plugin.json          # Codex plugin adapter
 │   ├── .claude-plugin/plugin.json         # Claude plugin adapter
 │   ├── plugin.json                        # Antigravity plugin adapter
-│   └── skills/write-thai-academic-book/   # Shared canonical Skill payload
-│       ├── SKILL.md
-│       ├── requirements.txt
-│       ├── agents/openai.yaml
-│       ├── assets/
-│       ├── references/
-│       └── scripts/
+│   └── skills/                            # Shared canonical Skill payloads
+│       ├── write-thai-academic-book/
+│       ├── research-outline-evidence/
+│       ├── assess-thai-academic-manuscript/
+│       └── orchestrate-thai-academic-writing/
 └── scripts/
     ├── install.ps1
     ├── install.sh
     └── validate_distribution.py
 ```
 
-Host-specific filesเป็น adapter เท่านั้น เนื้อหา workflow อยู่ใน
-`plugins/write-thai-academic-book/skills/write-thai-academic-book/` ชุดเดียว
+Host-specific files เป็น adapter เท่านั้น เนื้อหา workflow อยู่ใน
+`plugins/write-thai-academic-book/skills/`
 
 ## การติดตั้ง
 
@@ -119,7 +140,7 @@ user-level Skill
 
 วิธี Skill โดยตรง:
 
-1. ดาวน์โหลด [`packages/write-thai-academic-book.zip`](packages/write-thai-academic-book.zip)
+1. ดาวน์โหลด Skill ZIP ที่ต้องการจาก [`packages/`](packages/) หรือทั้ง 4 ไฟล์เพื่อใช้ workflow ครบชุด
 2. เปิด `Customize > Skills`
 3. Upload ZIP และเปิดใช้งาน Skill
 
@@ -139,7 +160,7 @@ code execution ยังใช้ planning และ read-only review ได้ 
 ./scripts/install.sh claude-code
 ```
 
-ติดตั้งที่ `~/.claude/skills/write-thai-academic-book`
+ติดตั้งทั้ง 4 สกิลที่ `~/.claude/skills/`
 
 ### Google Antigravity IDE
 
@@ -149,7 +170,7 @@ code execution ยังใช้ planning และ read-only review ได้ 
 .\scripts\install.ps1 -Target antigravity
 ```
 
-ปลายทางคือ `~/.gemini/config/skills/write-thai-academic-book`
+ปลายทางคือ `~/.gemini/config/skills/<skill-name>` สำหรับทั้ง 4 สกิล
 
 ติดตั้งเป็น global plugin ซึ่งรวม Skill payload:
 
@@ -162,7 +183,7 @@ code execution ยังใช้ planning และ read-only review ได้ 
 สำหรับ workspace เฉพาะ ให้คัดลอกโฟลเดอร์ Skill ไปยัง:
 
 ```text
-<workspace>/.agents/skills/write-thai-academic-book/
+<workspace>/.agents/skills/<skill-name>/
 ```
 
 ### Google Antigravity CLI

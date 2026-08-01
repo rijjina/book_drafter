@@ -30,6 +30,7 @@ A-equivalent as an official institutional grade.
 2. Inventory `output/<project-id>/` before reading source PDFs or writing.
    Existing artifacts are the default source of truth.
 3. Run `scripts/check_task_gate.py` with the selected task and approved type.
+   For `draft-chapter`, also pass the validated Matrix and Evidence Package.
    Stop on any blocker. Do not manufacture missing prerequisites.
 4. Write only the selected task's owned artifacts. Never combine drafting,
    formal QC, revision, another chapter, final QC, or export in one invocation.
@@ -89,6 +90,10 @@ Approval ownership is fixed:
 
 Approval for one task or chapter never approves another. Final export approval
 must include both `Status: APPROVED` and `Deliverable: DOCX`.
+
+Companion artifacts under `research/`, `assessments/`, and the explicitly
+passed Outline Matrix are read-only writer inputs. They remain owned by their
+research, assessment, or Matrix skill and are not copied into writer outputs.
 
 ## Existing Artifacts First
 

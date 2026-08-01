@@ -1,9 +1,5 @@
 #!/usr/bin/env python3
-"""Export the canonical local skill and build a deterministic distribution ZIP.
-
-The directory containing this script is always the source of truth. Public Git
-working copies and ZIP packages are derived outputs and never flow back into it.
-"""
+"""Export the canonical Thai academic-writing skill suite deterministically."""
 
 from __future__ import annotations
 
@@ -17,26 +13,41 @@ from pathlib import Path
 
 
 SKILL_DIR = Path(__file__).resolve().parent.parent
-REPOSITORY_ROOT = SKILL_DIR.parent
-DEFAULT_EXPORT = (
-    REPOSITORY_ROOT
-    / "github-export"
-    / "write-thai-academic-book"
-    / "plugins"
-    / "write-thai-academic-book"
-    / "skills"
-    / "write-thai-academic-book"
+PUBLIC_DISTRIBUTION = (
+    SKILL_DIR.parent.name == "skills"
+    and (SKILL_DIR.parent.parent / ".codex-plugin" / "plugin.json").is_file()
 )
-DEFAULT_ZIP = (
-    REPOSITORY_ROOT
-    / "github-export"
-    / "write-thai-academic-book"
-    / "packages"
-    / "write-thai-academic-book.zip"
+WORKSPACE_ROOT = SKILL_DIR.parent if PUBLIC_DISTRIBUTION else SKILL_DIR.parent
+DIST_ROOT = (
+    SKILL_DIR.parents[3]
+    if PUBLIC_DISTRIBUTION
+    else WORKSPACE_ROOT / "github-export" / "write-thai-academic-book"
 )
-ZIP_PREFIX = "write-thai-academic-book"
+PLUGIN_SKILLS = (
+    SKILL_DIR.parent
+    if PUBLIC_DISTRIBUTION
+    else DIST_ROOT / "plugins" / "write-thai-academic-book" / "skills"
+)
+PACKAGE_ROOT = DIST_ROOT / "packages"
+SKILL_SOURCES = (
+    {
+        name: PLUGIN_SKILLS / name
+        for name in (
+            "write-thai-academic-book",
+            "research-outline-evidence",
+            "assess-thai-academic-manuscript",
+            "orchestrate-thai-academic-writing",
+        )
+    }
+    if PUBLIC_DISTRIBUTION
+    else {
+        "write-thai-academic-book": SKILL_DIR,
+        "research-outline-evidence": WORKSPACE_ROOT / "research-outline-evidence",
+        "assess-thai-academic-manuscript": WORKSPACE_ROOT / "assess-thai-academic-manuscript",
+        "orchestrate-thai-academic-writing": WORKSPACE_ROOT / "orchestrate-thai-academic-writing",
+    }
+)
 FIXED_ZIP_TIME = (2000, 1, 1, 0, 0, 0)
-
 EXCLUDED_DIRECTORY_NAMES = {
     "__pycache__",
     ".pytest_cache",
@@ -54,9 +65,7 @@ def is_included(relative: Path) -> bool:
         return False
     if relative.suffix.lower() in EXCLUDED_FILE_SUFFIXES:
         return False
-    if relative.name.startswith("~$"):
-        return False
-    return True
+    return not relative.name.startswith("~$")
 
 
 def included_files(root: Path) -> dict[str, Path]:
@@ -67,39 +76,27 @@ def included_files(root: Path) -> dict[str, Path]:
     }
 
 
-def sha256(path: Path) -> str:
-    digest = hashlib.sha256()
-    with path.open("rb") as stream:
-        for chunk in iter(lambda: stream.read(1024 * 1024), b""):
-            digest.update(chunk)
-    return digest.hexdigest()
+def sha256_bytes(value: bytes) -> str:
+    return hashlib.sha256(value).hexdigest()
 
 
 def fingerprints(root: Path) -> dict[str, str]:
-    return {name: sha256(path) for name, path in included_files(root).items()}
+    return {
+        name: sha256_bytes(path.read_bytes())
+        for name, path in included_files(root).items()
+    }
 
 
-def validate_export_target(source: Path, export: Path) -> None:
-    source = source.resolve()
+def validate_export_target(export: Path, skill_name: str) -> None:
     export = export.resolve()
-    expected_parent = (
-        REPOSITORY_ROOT
-        / "github-export"
-        / "write-thai-academic-book"
-        / "plugins"
-        / "write-thai-academic-book"
-        / "skills"
-    ).resolve()
-    if export.parent != expected_parent or export.name != "write-thai-academic-book":
+    if export.parent != PLUGIN_SKILLS.resolve() or export.name != skill_name:
         raise RuntimeError(f"Refusing unsafe export target: {export}")
-    if export == source or source in export.parents:
-        raise RuntimeError(f"Export target overlaps canonical source: {export}")
 
 
-def sync_export(source: Path, export: Path) -> None:
-    """Synchronize files in place so cloud folders do not observe a tree deletion."""
+def sync_export(source: Path, export: Path, skill_name: str) -> None:
+    """Synchronize in place so cloud-backed folders do not see a tree deletion."""
 
-    validate_export_target(source, export)
+    validate_export_target(export, skill_name)
     export.mkdir(parents=True, exist_ok=True)
     canonical = included_files(source)
     exported = {
@@ -107,19 +104,16 @@ def sync_export(source: Path, export: Path) -> None:
         for path in export.rglob("*")
         if path.is_file()
     }
-
     for relative, target in exported.items():
         if relative not in canonical:
             target.chmod(0o666)
             target.unlink()
-
     for relative, source_path in canonical.items():
         target = export / relative
         target.parent.mkdir(parents=True, exist_ok=True)
         if target.exists():
             target.chmod(0o666)
         shutil.copy2(source_path, target)
-
     for directory in sorted(
         (path for path in export.rglob("*") if path.is_dir()),
         key=lambda path: len(path.parts),
@@ -129,10 +123,10 @@ def sync_export(source: Path, export: Path) -> None:
             directory.rmdir()
 
 
-def build_zip(source: Path, output: Path) -> None:
+def build_zip(source: Path, output: Path, skill_name: str) -> None:
     output.parent.mkdir(parents=True, exist_ok=True)
     with tempfile.NamedTemporaryFile(
-        prefix="write-thai-academic-book-", suffix=".zip", dir=output.parent, delete=False
+        prefix=f"{skill_name}-", suffix=".zip", dir=output.parent, delete=False
     ) as stream:
         temp_zip = Path(stream.name)
     try:
@@ -141,7 +135,7 @@ def build_zip(source: Path, output: Path) -> None:
         ) as archive:
             for relative, path in included_files(source).items():
                 info = zipfile.ZipInfo(
-                    f"{ZIP_PREFIX}/{relative}", date_time=FIXED_ZIP_TIME
+                    f"{skill_name}/{relative}", date_time=FIXED_ZIP_TIME
                 )
                 info.compress_type = zipfile.ZIP_DEFLATED
                 info.external_attr = 0o100644 << 16
@@ -152,24 +146,24 @@ def build_zip(source: Path, output: Path) -> None:
             temp_zip.unlink()
 
 
-def zip_fingerprints(path: Path) -> dict[str, str]:
+def zip_fingerprints(path: Path, skill_name: str) -> dict[str, str]:
     if not path.is_file():
         return {}
-    prefix = f"{ZIP_PREFIX}/"
+    prefix = f"{skill_name}/"
     with zipfile.ZipFile(path) as archive:
-        result: dict[str, str] = {}
-        for name in archive.namelist():
-            if name.endswith("/") or not name.startswith(prefix):
-                continue
-            relative = name[len(prefix) :]
-            result[relative] = hashlib.sha256(archive.read(name)).hexdigest()
-        return result
+        return {
+            name[len(prefix) :]: sha256_bytes(archive.read(name))
+            for name in archive.namelist()
+            if not name.endswith("/") and name.startswith(prefix)
+        }
 
 
-def parity_report(source: Path, export: Path, package: Path) -> dict[str, object]:
+def skill_report(skill_name: str, source: Path) -> dict[str, object]:
+    export = PLUGIN_SKILLS / skill_name
+    package = PACKAGE_ROOT / f"{skill_name}.zip"
     canonical = fingerprints(source)
     exported = fingerprints(export) if export.is_dir() else {}
-    zipped = zip_fingerprints(package)
+    zipped = zip_fingerprints(package, skill_name)
     return {
         "status": "MATCH" if canonical == exported == zipped else "MISMATCH",
         "canonical_source": str(source),
@@ -194,20 +188,31 @@ def parity_report(source: Path, export: Path, package: Path) -> dict[str, object
 def parse_args() -> argparse.Namespace:
     parser = argparse.ArgumentParser(description=__doc__)
     parser.add_argument("--check", action="store_true", help="Check parity without writing.")
-    parser.add_argument("--export", type=Path, default=DEFAULT_EXPORT)
-    parser.add_argument("--zip", type=Path, default=DEFAULT_ZIP)
     return parser.parse_args()
 
 
 def main() -> int:
     args = parse_args()
-    source = SKILL_DIR.resolve()
-    export = args.export.resolve()
-    package = args.zip.resolve()
+    if PUBLIC_DISTRIBUTION and not args.check:
+        raise RuntimeError("The public distribution is check-only; package from the canonical workspace.")
+    missing = [name for name, path in SKILL_SOURCES.items() if not path.is_dir()]
+    if missing:
+        raise RuntimeError(f"Missing canonical skill directories: {', '.join(missing)}")
     if not args.check:
-        sync_export(source, export)
-        build_zip(source, package)
-    report = parity_report(source, export, package)
+        for name, source in SKILL_SOURCES.items():
+            sync_export(source.resolve(), PLUGIN_SKILLS / name, name)
+            build_zip(source.resolve(), PACKAGE_ROOT / f"{name}.zip", name)
+    skills = {name: skill_report(name, source.resolve()) for name, source in SKILL_SOURCES.items()}
+    writer = skills["write-thai-academic-book"]
+    report = {
+        "status": "MATCH" if all(item["status"] == "MATCH" for item in skills.values()) else "MISMATCH",
+        "canonical_files": writer["canonical_files"],
+        "export_matches": writer["export_matches"],
+        "zip_matches": writer["zip_matches"],
+        "excluded_source_pdfs": all(item["excluded_source_pdfs"] for item in skills.values()),
+        "excluded_caches": all(item["excluded_caches"] for item in skills.values()),
+        "skills": skills,
+    }
     print(json.dumps(report, ensure_ascii=False, indent=2, sort_keys=True))
     return 0 if report["status"] == "MATCH" else 2
 
