@@ -23,6 +23,8 @@ Claude Code และ Google Antigravity โดยมี manifest และต�
 
 [คู่มือภาษาไทยฉบับละเอียด](README-Lium-notebook.md)
 
+[Workflow พร้อมคำอธิบายและ Prompt ทุกขั้นตอน](docs/WORKFLOW-PROMPTS-TH.md)
+
 ## Compatibility
 
 | Platform | รูปแบบที่รองรับ | วิธีติดตั้งแนะนำ |
