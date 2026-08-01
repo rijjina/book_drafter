@@ -1,0 +1,4 @@
+interface:
+  display_name: "Research Outline Evidence"
+  short_description: "Map evidence from outlines to matrix claims"
+  default_prompt: "Use $research-outline-evidence to research and map verified evidence from my outline into a Matrix-ready handoff."

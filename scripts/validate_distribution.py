@@ -12,8 +12,15 @@ from pathlib import Path
 
 ROOT = Path(__file__).resolve().parent.parent
 PLUGIN = ROOT / "plugins" / "write-thai-academic-book"
-SKILL = PLUGIN / "skills" / "write-thai-academic-book"
-PACKAGE = ROOT / "packages" / "write-thai-academic-book.zip"
+SKILLS = {
+    name: PLUGIN / "skills" / name
+    for name in (
+        "write-thai-academic-book",
+        "research-outline-evidence",
+        "assess-thai-academic-manuscript",
+        "orchestrate-thai-academic-writing",
+    )
+}
 SEMVER = re.compile(r"^\d+\.\d+\.\d+(?:-[0-9A-Za-z.-]+)?(?:\+[0-9A-Za-z.-]+)?$")
 
 
@@ -32,10 +39,10 @@ def read_json(path: Path, errors: list[str]) -> dict:
     return value
 
 
-def skill_frontmatter(errors: list[str]) -> dict[str, str]:
-    path = SKILL / "SKILL.md"
+def skill_frontmatter(skill_name: str, errors: list[str]) -> dict[str, str]:
+    path = SKILLS[skill_name] / "SKILL.md"
     if not path.is_file():
-        errors.append("Missing shared skills/write-thai-academic-book/SKILL.md")
+        errors.append(f"Missing shared skills/{skill_name}/SKILL.md")
         return {}
     text = path.read_text(encoding="utf-8")
     match = re.match(r"\A---\s*\n(.*?)\n---\s*\n", text, flags=re.DOTALL)
@@ -99,28 +106,39 @@ def main() -> int:
     if antigravity.get("name") != PLUGIN.name:
         errors.append("Antigravity plugin name does not match the plugin folder")
 
-    fields = skill_frontmatter(errors)
-    if fields.get("name") != "write-thai-academic-book":
-        errors.append("Shared Skill frontmatter has the wrong name")
-    description = fields.get("description", "")
-    if not description or len(description) > 200:
-        errors.append("Shared Skill description must be 1-200 characters for Claude compatibility")
-    if not (SKILL / "requirements.txt").is_file():
+    for skill_name, skill_path in SKILLS.items():
+        fields = skill_frontmatter(skill_name, errors)
+        if fields.get("name") != skill_name:
+            errors.append(f"Shared Skill frontmatter has the wrong name: {skill_name}")
+        description = fields.get("description", "")
+        if not description or len(description) > 200:
+            errors.append(
+                f"Shared Skill description must be 1-200 characters: {skill_name}"
+            )
+        if not (skill_path / "agents" / "openai.yaml").is_file():
+            errors.append(f"Shared Skill is missing agents/openai.yaml: {skill_name}")
+    if not (SKILLS["write-thai-academic-book"] / "requirements.txt").is_file():
         errors.append("Shared Skill is missing requirements.txt")
 
-    if not PACKAGE.is_file():
-        errors.append("Cowork Skill ZIP is missing")
-    else:
-        with zipfile.ZipFile(PACKAGE) as archive:
+    for skill_name in SKILLS:
+        package = ROOT / "packages" / f"{skill_name}.zip"
+        if not package.is_file():
+            errors.append(f"Cowork Skill ZIP is missing: {skill_name}")
+            continue
+        with zipfile.ZipFile(package) as archive:
             names = [name for name in archive.namelist() if not name.endswith("/")]
-        prefix = "write-thai-academic-book/"
+        prefix = f"{skill_name}/"
         if not names or any(not name.startswith(prefix) for name in names):
-            errors.append("Cowork ZIP must contain the skill folder as its root")
-        for required in ("SKILL.md", "requirements.txt"):
-            if f"{prefix}{required}" not in names:
-                errors.append(f"Cowork ZIP is missing {required}")
-        if any("source-pdfs" in name or "__pycache__" in name or ".reference-cache" in name for name in names):
-            errors.append("Cowork ZIP contains excluded source PDFs or cache files")
+            errors.append(f"Cowork ZIP has the wrong root: {skill_name}")
+        if f"{prefix}SKILL.md" not in names:
+            errors.append(f"Cowork ZIP is missing SKILL.md: {skill_name}")
+        if any(
+            "source-pdfs" in name
+            or "__pycache__" in name
+            or ".reference-cache" in name
+            for name in names
+        ):
+            errors.append(f"Cowork ZIP contains excluded files: {skill_name}")
 
     powershell = (ROOT / "scripts" / "install.ps1").read_text(encoding="utf-8")
     shell = (ROOT / "scripts" / "install.sh").read_text(encoding="utf-8")
@@ -143,10 +161,16 @@ def main() -> int:
     ):
         if path not in shell:
             errors.append(f"Shell installer is missing target path {path}")
+    for skill_name in SKILLS:
+        if skill_name not in powershell:
+            errors.append(f"PowerShell installer omits {skill_name}")
+        if skill_name not in shell:
+            errors.append(f"Shell installer omits {skill_name}")
 
     result = {
         "status": "PASS" if not errors else "FAIL",
         "version": version,
+        "skills": sorted(SKILLS),
         "platforms": ["codex", "claude-cowork", "claude-code", "antigravity-ide", "antigravity-cli"],
         "errors": errors,
     }

@@ -13,14 +13,22 @@
 `MEETS_TARGET` และผู้ใช้ยืนยัน `Deliverable: DOCX` เท่านั้น ไม่มี hard token cap;
 การประหยัด token มาจาก index, cache และ incremental rebuild โดยไม่ลดคุณภาพ
 
-รุ่น `1.2.0` ใช้ Skill payload ชุดเดียวร่วมกันบน Codex, Claude Cowork,
+รุ่น `1.3.0` เพิ่ม workflow suite ที่แยกหน้าที่เป็น 4 skills:
+`write-thai-academic-book`, `research-outline-evidence`,
+`assess-thai-academic-manuscript` และ `orchestrate-thai-academic-writing`.
+แต่ละ skill ใช้ payload ชุดเดียวร่วมกันบน Codex, Claude Cowork,
 Claude Code, Antigravity IDE และ Antigravity CLI โดยมี manifest เฉพาะ host
 เป็น adapter เท่านั้น
+
+Flow มาตรฐานคือ `Outline → Assessment → Research SCOPING → Outline Matrix
+→ Research GAP_FILL → READY_TO_DRAFT → Draft/Assess/Approved Revision
+→ Manuscript Assessment → Final QC → DOCX` โดย assessment ไม่แก้ต้นฉบับ
+และ research ไม่แก้ Outline Matrix โดยตรง
 
 | Platform | Skill/Plugin location หรือ package |
 | --- | --- |
 | Codex | `~/.agents/skills/` หรือ Codex repo marketplace |
-| Claude Cowork | Claude plugin marketplace หรือ `packages/write-thai-academic-book.zip` |
+| Claude Cowork | Claude plugin marketplace หรือ ZIP ของแต่ละ skill ใน `packages/` |
 | Claude Code | `~/.claude/skills/` หรือ Claude plugin marketplace |
 | Antigravity IDE | `~/.gemini/config/skills/` หรือ `~/.gemini/config/plugins/` |
 | Antigravity CLI | `~/.gemini/antigravity-cli/plugins/` หรือ `agy plugin install` |

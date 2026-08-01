@@ -1,7 +1,7 @@
 {
   "name": "write-thai-academic-book",
-  "version": "1.2.0",
-  "description": "Style-preserving drafting and Level A quality control for Thai teaching notes, books, and textbooks.",
+  "version": "1.3.0",
+  "description": "Evidence-grounded research, assessment, outline-matrix handoff, and gated drafting for Thai academic manuscripts.",
   "author": {
     "name": "rijjina",
     "url": "https://github.com/rijjina"

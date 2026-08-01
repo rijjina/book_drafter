@@ -1,9 +1,10 @@
 # Chapter Workflow
 
-Read with `core-production-contract.md`. Load `editorial-standards.md` for every
-chapter task; load `qc-rubric.md` for `chapter-qc` and `revise-chapter`; load the
-document-type quality reference for the approved type. When a user draft or
+Read with `core-production-contract.md`. Load `editorial-standards.md` for
+drafting and approved revision. Load `assessment-integration.md` for
+`chapter-qc` and revision from approved assessment IDs. When a user draft or
 style evidence is involved, also read `style-preservation.md`.
+For `draft-chapter`, also read `evidence-matrix-integration.md`.
 
 ## `draft-chapter <NN>`
 
@@ -12,6 +13,11 @@ completion of the previous chapter. First determine whether the user supplied
 or identified a substantial source draft. Pass it to the gate with
 `--input <user-draft>`. Never infer user-draft status from generated
 `chapters/chapter-NN/draft.md`.
+
+Require `--outline-matrix` and `--evidence-package`. Both companion validators
+and the cross-skill handoff validator must pass; the Matrix must be
+`READY_TO_DRAFT` with no unresolved evidence cell. These artifacts are
+read-only inputs and never become writer-owned outputs.
 
 ### No user draft
 
@@ -55,17 +61,14 @@ this task.
 
 Require approved chapter draft. Create only:
 
-- `chapter-qc.md` from `assets/chapter-qc-template.md`;
+- `chapter-qc.md` from `assets/assessment-adapter-template.md`;
 - pending chapter approval.
 
-Do not edit the draft. Identify every gap to the fixed target using
-`qc-rubric.md` and the applicable type reference. Verify claims, citations,
-rights, logic, synthesis, author contribution, accessibility, and scope.
-
-When `draft-audit.md` identifies a user draft, read `style-profile.md` and
-report style preservation as `PASS`, `REVIEW`, or `FAIL`. If a legacy chapter
-predates style profiles, use the source path/checksum in `draft-audit.md`, record
-`LEGACY_FALLBACK`, and do not block solely because a profile is absent.
+Do not edit or reassess the draft. Require a validated `ASSESS_CHAPTER` package
+whose input hash matches `draft.md`. Preserve package findings and limitations;
+the adapter records only their IDs, statuses, counts, and paths. A style profile
+may be used during later approved revision but does not authorize a second QC
+judgment here.
 
 ## `revise-chapter <NN>`
 
@@ -88,8 +91,8 @@ the next chapter.
 ## Gate Examples
 
 ```powershell
-python scripts/check_task_gate.py --project-root <project> --task draft-chapter --chapter 2 --document-type textbook
-python scripts/check_task_gate.py --project-root <project> --task draft-chapter --chapter 1 --document-type book --input <user-chapter.docx>
-python scripts/check_task_gate.py --project-root <project> --task chapter-qc --chapter 1 --document-type book
+python scripts/check_task_gate.py --project-root <project> --task draft-chapter --chapter 2 --document-type textbook --outline-matrix <matrix.md> --evidence-package <research/.../evidence-package.md>
+python scripts/check_task_gate.py --project-root <project> --task draft-chapter --chapter 1 --document-type book --input <user-chapter.docx> --outline-matrix <matrix.md> --evidence-package <research/.../evidence-package.md>
+python scripts/check_task_gate.py --project-root <project> --task chapter-qc --chapter 1 --document-type book --assessment-package <project>/assessments/<assessment-id>
 python scripts/check_task_gate.py --project-root <project> --task revise-chapter --chapter 1 --document-type book
 ```

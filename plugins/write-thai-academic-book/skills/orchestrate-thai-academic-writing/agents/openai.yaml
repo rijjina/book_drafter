@@ -1,0 +1,4 @@
+interface:
+  display_name: "Thai Academic Writing Workflow"
+  short_description: "Coordinate evidence-led Thai academic writing"
+  default_prompt: "Use $orchestrate-thai-academic-writing to inspect my project state and route the next approved writing, research, matrix, assessment, or production gate."

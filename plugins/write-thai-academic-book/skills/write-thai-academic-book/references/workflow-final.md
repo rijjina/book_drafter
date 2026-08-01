@@ -1,9 +1,9 @@
 # Final QC and DOCX Workflow
 
-Read with `core-production-contract.md`. Load `qc-rubric.md`, the approved
-document-type quality reference, and `source-map.md` for unresolved high-risk
-evidence during final QC. Load `editorial-standards.md` when checking packaging,
-figures, tables, captions, citations, or rights.
+Read with `core-production-contract.md` and `assessment-integration.md`. Academic
+findings come from a validated `ASSESS_MANUSCRIPT` package. Load
+`editorial-standards.md` only for mechanical packaging, figures, tables,
+captions, citations, rights, or accessibility checks.
 
 ## `final-qc`
 
@@ -12,15 +12,19 @@ declared chapter. For an imported manuscript, require approved
 `revise-manuscript`, or approved `manuscript-qc` when no revision is required.
 Read `revised.md` when present, otherwise `draft.md`.
 
-Run preflight and expert review. Create only:
+Require `--assessment-package`, run mechanical preflight, and create only:
 
 - `final/preflight-report.md`;
 - `final/final-qc.md` from `assets/qc-report-template.md`;
 - `final/approval.md` with task `final-qc` and status `PENDING`.
 
-The report must use machine-readable target, decision, blocker, and type-specific
-evidence fields. Do not generate DOCX or PDF. A human may unlock export only by
-approving a `MEETS_TARGET` report and recording both `Status: APPROVED` and
+Use `assets/assessment-adapter-template.md`. Link the package rather than
+copying or recomputing findings, then add machine-readable target, decision,
+blocker, and type-specific evidence fields from the validated package and
+mechanical preflight. Do not generate DOCX or PDF. `NEEDS_RULE_REFRESH`,
+`NEEDS_EVIDENCE`, `BLOCKED_RULE_SELECTION`, any unresolved assessment blocker,
+or failed preflight cannot become `MEETS_TARGET`. A human may unlock export only
+by approving a `MEETS_TARGET` report and recording both `Status: APPROVED` and
 `Deliverable: DOCX`.
 
 ## `produce-document`
@@ -71,6 +75,6 @@ for existing projects.
 Rendering every final page remains mandatory for all three statuses.
 
 ```powershell
-python scripts/check_task_gate.py --project-root <project> --task final-qc --chapter-count 9 --document-type textbook
+python scripts/check_task_gate.py --project-root <project> --task final-qc --chapter-count 9 --document-type textbook --assessment-package <project>/assessments/<assessment-id>
 python scripts/check_task_gate.py --project-root <project> --task produce-document --chapter-count 9 --document-type textbook
 ```
