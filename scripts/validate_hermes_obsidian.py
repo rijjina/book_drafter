@@ -63,6 +63,8 @@ REQUIRED = (
     INTEGRATION / "vault-template" / "AI-SHARED-CONTEXT.md",
     INTEGRATION / "vault-template" / "Templates" / "PROJECT.md",
     INTEGRATION / "vault-template" / "Templates" / "HANDOFF.md",
+    ROOT / "setup.ps1",
+    ROOT / "scripts" / "install.ps1",
     ROOT / "scripts" / "setup-hermes-obsidian.ps1",
 )
 

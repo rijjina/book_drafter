@@ -110,6 +110,32 @@ Host-specific files เป็น adapter เท่านั้น เนื้�
 
 ## การติดตั้ง
 
+### ติดตั้งทั้งชุดบนเครื่องใหม่ด้วยคำสั่งเดียว
+
+บนเครื่องใหม่ วางบรรทัดเดียวนี้ใน PowerShell เพื่อ clone branch ปัจจุบันและติดตั้ง:
+
+```powershell
+git clone --branch agent/academic-writing-workflow-suite https://github.com/rijjina/book_drafter.git book_drafter; powershell -NoProfile -ExecutionPolicy Bypass -File .\book_drafter\setup.ps1
+```
+
+หาก clone repository ไว้แล้ว เปิด PowerShell ในโฟลเดอร์ repository และรัน:
+
+```powershell
+.\setup.ps1
+```
+
+คำสั่งนี้ติดตั้ง Skill ทั้งชุดสำหรับ Codex ที่ `~/.agents/skills`, สร้าง Obsidian
+vault ที่ `Documents\Academic-Writing-Vault`, ลงทะเบียน skill directories และ vault
+กับ Hermes เมื่อพบ `hermes` บน `PATH`, แล้วตรวจ portability ให้อัตโนมัติ
+สคริปต์รันซ้ำได้ โดยจะเก็บไฟล์ที่มีอยู่ใน vault ไว้
+
+กำหนด vault เองหรือข้าม Hermes ได้ เช่น:
+
+```powershell
+.\setup.ps1 -VaultPath "D:\Notes\Academic-Vault"
+.\setup.ps1 -SkipHermes
+```
+
 ### Codex — Plugin marketplace
 
 เหมาะเมื่อใช้ Codex app และต้องการให้ plugin ปรากฏใน Plugins Directory:

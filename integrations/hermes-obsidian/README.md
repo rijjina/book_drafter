@@ -31,6 +31,17 @@ Hermes server key, or machine-specific absolute path.
 
 Prerequisites: Git, Python 3.10+, Hermes Agent, and Obsidian.
 
+After cloning, the complete default setup is one command:
+
+```powershell
+.\setup.ps1
+```
+
+It installs all bundled Codex skills, creates the default vault when needed,
+registers Hermes when its CLI is available, and validates the integration.
+Use the lower-level command below only when you want to configure Hermes/Obsidian
+without installing Codex skills.
+
 ```powershell
 git clone https://github.com/rijjina/book_drafter.git
 Set-Location book_drafter
