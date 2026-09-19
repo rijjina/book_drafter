@@ -11,6 +11,16 @@
 Claude Code และ Google Antigravity โดยมี manifest และตัวติดตั้งบาง ๆ สำหรับ
 แต่ละ host ไม่แยกสำเนา workflow จึงลดปัญหาเนื้อหาและ gate ไม่ตรงกัน
 
+สำหรับ Hermes Agent + Obsidian และการย้ายไปเครื่องใหม่ มี portable harness เพิ่มที่
+[`integrations/hermes-obsidian/`](integrations/hermes-obsidian/) รองรับ scientific
+manuscript, หนังสือ/ตำรา/เอกสารคำสอน และ `เอกสารประกอบการสอน` โดยไม่ผูกกับ
+drive letter หรือชื่อผู้ใช้ของเครื่องเดิม
+
+skill สำหรับ `เอกสารประกอบการสอน` มี reusable writing-style profile ที่สกัดเฉพาะ
+น้ำเสียง จังหวะย่อหน้า ลำดับการอธิบาย ตัวอย่าง กิจกรรม สรุป และแบบฝึกหัดจาก
+เอกสารเก่า โดยไม่บรรจุเนื้อหาวิชาเดิม คำศัพท์เฉพาะ ตัวอย่าง ข้อเท็จจริง หรือ citation
+ของรายวิชาเดิมลงใน skill
+
 | Skill | หน้าที่ |
 | --- | --- |
 | `orchestrate-thai-academic-writing` | กำกับ flow และตรวจ handoff ระหว่างสกิล |
@@ -34,6 +44,7 @@ Claude Code และ Google Antigravity โดยมี manifest และต�
 | Claude Code | Skill หรือ Claude plugin | `~/.claude/skills` หรือ marketplace |
 | Antigravity IDE | Agent Skill หรือ Antigravity plugin | `~/.gemini/config/skills` หรือ `~/.gemini/config/plugins` |
 | Antigravity CLI | Antigravity plugin | `agy plugin install` หรือ `~/.gemini/antigravity-cli/plugins` |
+| Hermes Agent + Obsidian | External skill directories + provider-neutral vault | `scripts/setup-hermes-obsidian.ps1` |
 
 โครงสร้างหลักเป็นไปตาม Agent Skills แบบ progressive disclosure:
 `SKILL.md` มี `name` และ `description`; รายละเอียดแยกอยู่ใน `references/`;
@@ -207,6 +218,22 @@ agy plugin install ./plugins/write-thai-academic-book
 ```
 
 ปลายทางคือ `~/.gemini/antigravity-cli/plugins/write-thai-academic-book`
+
+### Hermes Agent + Obsidian
+
+ใช้ harness แบบ portable ซึ่งเก็บ skills ใน Git แต่เก็บ vault งานจริงแยกจาก repo:
+
+```powershell
+.\scripts\setup-hermes-obsidian.ps1 `
+  -VaultPath "$HOME\Documents\Academic-Writing-Vault" `
+  -InitializeVault `
+  -ConfigureHermes
+```
+
+หากคัดลอกหรือ sync vault เดิมมาจากเครื่องเก่าแล้ว ให้ตัด `-InitializeVault` ออก
+และระบุ path ของ vault เดิม สคริปต์จะคง `skills.external_dirs` รายการเดิมไว้และเพิ่ม
+path ของชุดนี้โดยไม่เขียนทับไฟล์ vault ที่มีอยู่ ดูคู่มือเต็มที่
+[`integrations/hermes-obsidian/README.md`](integrations/hermes-obsidian/README.md)
 
 ## Runtime Dependencies
 

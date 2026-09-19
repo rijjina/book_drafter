@@ -1,0 +1,4 @@
+interface:
+  display_name: "Thai Academic Teaching Material"
+  short_description: "Reusable Thai teaching prose across disciplines"
+  default_prompt: "Use $thai-academic-teaching-material to draft this course in my established teaching voice without carrying over old subject content."

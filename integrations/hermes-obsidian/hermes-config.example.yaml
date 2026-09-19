@@ -1,0 +1,11 @@
+# Merge this fragment into the active Hermes config only if you are not using
+# scripts/setup-hermes-obsidian.ps1. Replace placeholders with absolute paths on the
+# current computer. Do not copy machine-specific paths from another computer.
+skills:
+  external_dirs:
+    - <REPOSITORY_ROOT>/plugins/write-thai-academic-book/skills
+    - <REPOSITORY_ROOT>/integrations/hermes-obsidian/skills
+
+# Set OBSIDIAN_VAULT_PATH through `hermes config set OBSIDIAN_VAULT_PATH <path>`.
+# Keep credentials and tokens out of this file and out of the Obsidian vault.
+
